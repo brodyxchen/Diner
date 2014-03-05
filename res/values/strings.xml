@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Diner</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_search">search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="search_hint">输入餐馆名称</string>
+    <string name="tab_1">餐馆</string>
+    <string name="tab_2">规则</string>
+    <string name="tab_3">菜单</string>
+    
+    <string name="desc">desc</string>
+    
+    
+    <string name="rules_number_topic">数量</string>
+    <string name="rules_number_class1">荤</string>
+    <string name="rules_number_class2">素</string>
+    <string name="rules_number_class3">汤</string>
+
+    <string name="rules_edit_button">编辑规则</string>
+    <string name="rules_produce_button">生成菜单</string>
+    
+    
+    <!-- Setting -->
+    <string name="Setting_Server_head">服务器</string>
+    <string name="Setting_Server_offline">离线</string>
+    <string name="Setting_Server_online">在线</string>
+    <string name="Setting_Server_defined">自定义</string>
+    <string name="Setting_Server_defined_hint">输入服务器地址</string>
+    <string name="Setting_Cancel">默认</string>
+    <string name="Setting_Apply">应用</string>
+    
+    <!-- About -->
+    <string name="about_head">About</string>
+    <string name="about_team">Team:</string>
+    <string name="about_tel">Tel:</string>
+    <string name="about_email">Email:</string>
+    <string name="about_address">Address:</string>
+    
+    <string name="about_team_context">重大机器学习团队</string>
+    <string name="about_tel_context">186XXXXXXXX</string>
+    <string name="about_email_context">xxxxx@xxx.com</string>
+    <string name="about_address_context">中国重庆市XXX区XX路XXX号</string>
+</resources>

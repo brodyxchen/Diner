@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_gray_normal"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/aboutArea0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dip"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/aboutHead0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/about_head"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/font_color_deep" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/divider_color_deep" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aboutArea1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/aboutArea0"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/aboutArea11"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+			<TextView
+                android:id="@+id/aboutHead1"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_team"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_deep" />
+
+			<View  android:id="@+id/aboutDiver1"
+			   	android:layout_width="1px"  
+				android:layout_height="20dip"
+				android:layout_toRightOf="@id/aboutHead1"
+               	android:layout_centerVertical="true"
+			   	android:background="?android:attr/listDivider"  
+			/> 
+			
+
+            <TextView
+                android:id="@+id/aboutHeadContext1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/aboutDiver1"
+                android:layout_marginLeft="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_team_context"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_gray_deep" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aboutArea2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/aboutArea1"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" >
+
+
+        <RelativeLayout
+            android:id="@+id/aboutArea22"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/aboutHead2"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_tel"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_deep" />
+			<View  android:id="@+id/aboutDiver2"
+			   	android:layout_width="1px"  
+				android:layout_height="20dip"
+				android:layout_toRightOf="@id/aboutHead2"
+               	android:layout_centerVertical="true"
+			   	android:background="?android:attr/listDivider"  
+			/> 
+            <TextView
+                android:id="@+id/aboutHeadContext2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/aboutDiver2"
+                android:layout_marginLeft="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_tel_context"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_gray_deep" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aboutArea3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/aboutArea2"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" >
+
+
+        <RelativeLayout
+            android:id="@+id/aboutArea33"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/aboutHead3"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_email"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_deep" />
+			<View  android:id="@+id/aboutDiver3"
+			   	android:layout_width="1px"  
+				android:layout_height="20dip"
+				android:layout_toRightOf="@id/aboutHead3"
+               	android:layout_centerVertical="true"
+			   	android:background="?android:attr/listDivider"  
+			/> 
+            <TextView
+                android:id="@+id/aboutHeadContext3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/aboutDiver3"
+                android:layout_marginLeft="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_email_context"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_gray_deep" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aboutArea4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/aboutArea3"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" >
+
+
+        <RelativeLayout
+            android:id="@+id/aboutArea44"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/aboutHead4"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_address"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_color_deep" />
+			<View  android:id="@+id/aboutDiver4"
+			   	android:layout_width="1px"  
+				android:layout_height="20dip"
+				android:layout_toRightOf="@id/aboutHead4"
+               	android:layout_centerVertical="true"
+			   	android:background="?android:attr/listDivider"  
+			/> 
+            <TextView
+                android:id="@+id/aboutHeadContext4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/aboutDiver4"
+                android:layout_marginLeft="10dip"
+                android:layout_centerVertical="true"
+                android:text="@string/about_address_context"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/font_gray_deep" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+</RelativeLayout>

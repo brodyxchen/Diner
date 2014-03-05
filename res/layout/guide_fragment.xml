@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_gray_normal" >
+    
+    <ImageView  
+        android:id="@+id/guideImage"  
+        android:layout_width="match_parent"  
+        android:layout_height="match_parent"  
+        android:scaleType="fitXY"
+        android:src="@drawable/guide_background"
+        android:contentDescription="@string/desc"
+           />  
+
+</LinearLayout>

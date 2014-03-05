@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_gray_normal"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/scrollSetting"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/SettingMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_gray_normal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/SettingWideArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dip"
+                android:background="@color/background_gray_light"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/settingServerHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dip"
+                    android:text="@string/Setting_Server_head"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/font_color_deep" />
+
+                <RadioGroup
+                    android:id="@+id/SettingServerRadioGroup0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <!-- 添加多个RadioGroup组件 -->
+
+                    <RadioButton
+                        android:id="@+id/SettingServerRadioButton0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/Setting_Server_online" >
+                    </RadioButton>
+
+                    <RadioButton
+                        android:id="@+id/SettingServerRadioButton1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/Setting_Server_offline" >
+                    </RadioButton>
+
+                    <RadioButton
+                        android:id="@+id/SettingServerRadioButton2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/Setting_Server_defined" >
+                    </RadioButton>
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/SettingServerEditText0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/Setting_Server_defined_hint"
+                    android:inputType="textEmailAddress" />
+
+                <View
+                    android:id="@+id/divideLine0"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/SettingButtonArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/background_color_deep"
+        android:orientation="horizontal" >
+
+
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1px"
+            android:layout_height="40dip"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/background_gray_normal" />
+        <Button
+            android:id="@+id/SettingCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/divider"
+            android:background="@color/background_color_deep"
+            android:text="@string/Setting_Cancel"
+            android:textSize="22sp" >
+        </Button>
+        
+        <Button
+            android:id="@+id/SettingApply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/divider"
+            android:background="@color/background_color_deep"
+            android:text="@string/Setting_Apply"
+            android:textSize="22sp" >
+        </Button>
+    </RelativeLayout>
+
+</RelativeLayout>

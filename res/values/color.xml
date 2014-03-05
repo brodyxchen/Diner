@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 背景色 -->
+    <color name="background_gray_light">#FFFFFF</color> <!-- 白色 区块背景 -->
+    <color name="background_gray_normal">#F9F9F9</color> <!-- 灰色  默认背景 -->
+    <color name="background_gray_deep">#C9C9C9</color> <!-- 白色 区块中区块 -->
+    
+    <color name="background_color_light">#EFF8FC</color> <!-- 淡彩色 背景 -->
+    <color name="background_color_normal">#B3E5FF</color> <!-- 彩色  背景 -->
+    <color name="background_color_deep">#81BAE7</color> <!-- 深彩色  背景-->
+
+
+    <!-- 字体颜色 -->
+    <color name="font_gray_light">#DDDDDD</color> <!-- 淡灰色 -->
+    <color name="font_gray_normal">#808080</color> <!-- 灰色 -->
+    <color name="font_gray_deep">#000000</color> <!-- 深灰色 -->
+    
+    <color name="font_color_light">#FFD7B2</color> <!-- 淡彩色 -->
+    <color name="font_color_normal">#FFA147</color> <!-- 彩色 -->
+    <color name="font_color_deep">#FF7E00</color> <!-- 深彩色 -->
+    
+    <!-- 分割线 -->
+    <color name="divider_gray_light">#F8F8F8</color> <!-- 淡灰色 -->
+    <color name="divider_gray_normal">#D0D0D0</color> <!-- 灰色 -->
+    <color name="divider_gray_deep">#000000</color> <!-- 深灰色 -->
+    
+    <color name="divider_color_light">#EFF8FC</color> <!-- 淡彩色 -->
+    <color name="divider_color_normal">#B3E5FF</color> <!-- 彩色 -->
+    <color name="divider_color_deep">#81BAE7</color> <!-- 深彩色 -->
+    
+    <color name="red">#f00</color> 
+    <color name="blue">#0000ff</color> 
+    <color name="green">#f0f0</color> 
+    <color name="light">#CCCCFF</color> 
+    
+</resources>
