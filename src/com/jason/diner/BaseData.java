@@ -19,7 +19,7 @@ class ServerInfo{
 	
 	public String prompt;
 	ServerInfo(){
-		url = "http://172.20.143.97/myorder";
+		url = "http://mqstreetball.51a.net222-2.net"; //"http://172.20.143.97/myorder";
 		searchAddress = "/search.php";
 		shopAddress = "/selectedShop.php";
 		conditionAddress = "/getRule.php";
