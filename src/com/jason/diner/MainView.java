@@ -40,9 +40,6 @@ public class MainView extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-//		shopfragment = null;
-//		ruleFragment = null;
         resources = Document.MainDoc().mainActivity.resources;
         currIndex = 0;
 	}

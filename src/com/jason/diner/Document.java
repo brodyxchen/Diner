@@ -9,7 +9,6 @@ public class Document {
 	private static Document mainDoc = null;
 	public MainActivity mainActivity = null;
 	
-	
 	public int screenWidth;
 	public ImageCache imageCache;
 	public ServerInfo server;
