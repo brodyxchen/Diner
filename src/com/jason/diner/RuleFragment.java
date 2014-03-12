@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import android.app.ProgressDialog;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ public class RuleFragment extends Fragment implements UIInterface {
 	private Button createShow;
 	private View rootView ;
 	private HashMap<String, ArrayList<ViewPair>> checkBoxList;
-	
+	private ProgressDialog progressbar;
 	private NumberPicker picker1, picker2, picker3;
 	
     @Override
@@ -60,7 +61,6 @@ public class RuleFragment extends Fragment implements UIInterface {
 				// TODO Auto-generated method stub
 				RuleInfo rule = Document.MainDoc().rule;
 				rule.clear();
-
 				rule.shopId = Document.MainDoc().shop.shopId;
 				Iterator iter0 = Document.MainDoc().shop.selectedTopList.entrySet().iterator();
 				while(iter0.hasNext()){
@@ -73,7 +73,6 @@ public class RuleFragment extends Fragment implements UIInterface {
 				rule.categoryList.add("" + picker1.getValue());
 				rule.categoryList.add("" + picker2.getValue());
 				rule.categoryList.add("" + picker3.getValue());
-				
 				Iterator iter1 = checkBoxList.entrySet().iterator();
 				while(iter1.hasNext()){
 					Map.Entry<String, ArrayList<ViewPair>> entry = (Map.Entry<String, ArrayList<ViewPair>>) iter1.next();
@@ -85,13 +84,23 @@ public class RuleFragment extends Fragment implements UIInterface {
 					}
 					rule.conditionList.put(entry.getKey(), tempList);
 				}
-				Document.MainDoc().mainActivity.selectItem(1);
+				Document.MainDoc().mainActivity.selectItem(2);
 			}
 		});
 		
+		String param = "rule=rule";
+		String oldParam = Document.MainDoc().server.paramRule;
+		if(oldParam != null && oldParam.trim().equals(param)){
+			updateUI();
+		}else{
+			Document.MainDoc().server.paramRule = param;
+			MyAsyncTask mTask = new MyAsyncTask(this);
+			mTask.execute(Document.MainDoc().server.getConditionUrl(null));
+			progressbar = ProgressDialog.show(Document.MainDoc().mainActivity, "Loading...", "Please wait...", true, false);
+		}
 		
-		MyAsyncTask mTask = new MyAsyncTask(this);
-		mTask.execute(Document.MainDoc().server.getConditionUrl(null));
+		
+
 		return rootView;
     }
     
@@ -100,9 +109,10 @@ public class RuleFragment extends Fragment implements UIInterface {
 	public void updateData(String json) {
 		// TODO Auto-generated method stub
 		if(!Helper.json2Condition(json, Document.MainDoc().condition)){
-			Toast.makeText(Document.MainDoc().mainActivity.activity, "请求数据异常，请重试！",
+			Toast.makeText(Document.MainDoc().mainActivity, "请求数据异常，请重试！",
 				     Toast.LENGTH_SHORT).show();
 		}
+		progressbar.dismiss();
 	}
 
 	@Override
@@ -122,7 +132,7 @@ public class RuleFragment extends Fragment implements UIInterface {
 			ArrayList<ViewPair> pairList = new ArrayList<ViewPair>();
 			
 			//LinearLayout Area
-			LinearLayout ruleArea = new LinearLayout(Document.MainDoc().mainActivity.activity);
+			LinearLayout ruleArea = new LinearLayout(Document.MainDoc().mainActivity);
 			ruleArea.setBackgroundResource(R.color.background_gray_light);
 			ruleArea.setId(idIndex);
 			ruleArea.setOrientation(LinearLayout.VERTICAL);
@@ -135,7 +145,7 @@ public class RuleFragment extends Fragment implements UIInterface {
 			
 			
 			
-			TextView ruleHead = new TextView(Document.MainDoc().mainActivity.activity);
+			TextView ruleHead = new TextView(Document.MainDoc().mainActivity);
 			
 			Resources resource = Document.MainDoc().mainActivity.resources;
 			ColorStateList csl = (ColorStateList) resource.getColorStateList(R.color.font_color_deep);  
@@ -154,7 +164,7 @@ public class RuleFragment extends Fragment implements UIInterface {
 			int row = (int)Math.ceil((double) size / col);
 			
 			for(int i = 0; i < row; i++){
-				LinearLayout ruleZone = new LinearLayout(Document.MainDoc().mainActivity.activity);
+				LinearLayout ruleZone = new LinearLayout(Document.MainDoc().mainActivity);
 				LinearLayout.LayoutParams zoneParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 				zoneParam.topMargin = 10;
 				ruleZone.setOrientation(LinearLayout.HORIZONTAL);
@@ -165,10 +175,10 @@ public class RuleFragment extends Fragment implements UIInterface {
 					if(index >= size)
 						break;
 					
-					CheckBox cb = new CheckBox(Document.MainDoc().mainActivity.activity);
+					CheckBox cb = new CheckBox(Document.MainDoc().mainActivity);
 
 					LinearLayout.LayoutParams cbParam = new LinearLayout.LayoutParams(screemW / col / 3, ViewGroup.LayoutParams.WRAP_CONTENT);
-					TextView tv = new TextView(Document.MainDoc().mainActivity.activity);
+					TextView tv = new TextView(Document.MainDoc().mainActivity);
 					LinearLayout.LayoutParams tvParam = new LinearLayout.LayoutParams(screemW / col / 3 * 2, ViewGroup.LayoutParams.WRAP_CONTENT);
 					tv.setText(value.get(index));
 					ColorStateList csl2 = (ColorStateList) resource.getColorStateList(R.color.font_gray_normal);  
@@ -183,7 +193,7 @@ public class RuleFragment extends Fragment implements UIInterface {
 				}
 			}
 			
-			View divider = new View(Document.MainDoc().mainActivity.activity);
+			View divider = new View(Document.MainDoc().mainActivity);
 			LinearLayout.LayoutParams dividerParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 			divider.setBackgroundResource(R.color.divider_gray_normal);
 			ruleArea.addView(divider, dividerParam);

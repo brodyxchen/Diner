@@ -80,7 +80,7 @@ public class MainView extends Fragment {
         fragmentsList.add(shopfragment);
         fragmentsList.add(ruleFragment);
 
-        mPager.setAdapter(new MyFragmentPagerAdapter(Document.MainDoc().mainActivity.activity.getSupportFragmentManager(), fragmentsList));
+        mPager.setAdapter(new MyFragmentPagerAdapter(Document.MainDoc().mainActivity.fragmentManager, fragmentsList));
         mPager.setCurrentItem(0);
         mPager.setOnPageChangeListener(new MyOnPageChangeListener());
 

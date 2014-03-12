@@ -3,11 +3,11 @@ package com.jason.diner;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +30,7 @@ public class ShopFragment extends Fragment implements UIInterface{
 	private View rootView;
 	private ListView topList;
 	private MyShopAdapter topAdapter;
+	private ProgressDialog progressbar;
 
 
 	@Override
@@ -44,7 +45,7 @@ public class ShopFragment extends Fragment implements UIInterface{
 		// TODO Auto-generated method stub
 
 		if(!Helper.json2Shop(json, Document.MainDoc().shop)){
-			Toast.makeText(Document.MainDoc().mainActivity.activity, "没有推荐菜",
+			Toast.makeText(Document.MainDoc().mainActivity, "没有推荐菜",
 				     Toast.LENGTH_SHORT).show();
 		}else{
 			for (DishInfo item : Document.MainDoc().shop.topList) {
@@ -62,6 +63,9 @@ public class ShopFragment extends Fragment implements UIInterface{
 				Document.MainDoc().shop.selectedTopList.put(item.dishId, false);
 			}
 		}
+		
+		progressbar.dismiss();
+		
 	}
 
 	@Override
@@ -69,7 +73,7 @@ public class ShopFragment extends Fragment implements UIInterface{
 		// TODO Auto-generated method stub
 
 		topList = (ListView) rootView.findViewById(R.id.topList);
-		topAdapter = new MyShopAdapter(Document.MainDoc().mainActivity.activity,
+		topAdapter = new MyShopAdapter(Document.MainDoc().mainActivity,
 				Document.MainDoc().shop.topListBlinding);
 		topList.setAdapter(topAdapter);
 	}
@@ -95,10 +99,18 @@ public class ShopFragment extends Fragment implements UIInterface{
 			shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
 		}
 
-
-		MyAsyncTask mTask = new MyAsyncTask(this);
 		String param = "shopId=" + Document.MainDoc().shop.shopId;
-		mTask.execute(Document.MainDoc().server.getShopUrl(param));
+		String oldParam = Document.MainDoc().server.paramShop;
+		if(oldParam != null && oldParam.trim().equals(param)){
+			updateUI();
+		}else{
+			Document.MainDoc().server.paramShop = param;
+			MyAsyncTask mTask = new MyAsyncTask(this);
+			mTask.execute(Document.MainDoc().server.getShopUrl(param));
+			progressbar = ProgressDialog.show(Document.MainDoc().mainActivity, "Loading..", "Please wait...", true, false);
+		}
+
+		
 		
 		return rootView;
 	}

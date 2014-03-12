@@ -75,7 +75,7 @@ public class SettingFragment extends Fragment {
 					if (isUrl) {
 						Document.MainDoc().server.url = url;
 					} else {
-						Toast.makeText(Document.MainDoc().mainActivity.activity, "无效的URL",
+						Toast.makeText(Document.MainDoc().mainActivity, "无效的URL",
 								Toast.LENGTH_SHORT).show();
 					}
 				}

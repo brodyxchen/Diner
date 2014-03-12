@@ -43,8 +43,8 @@ public class MainActivity extends FragmentActivity {
 	public MenuItem menuItem;
 	public SearchManager searchManager;
 	public Fragment fragment;
-	public FragmentActivity activity;
 	public Resources resources;
+	private MenuItem searchItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,30 +60,34 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setBackgroundDrawable(
 				this.getResources().getDrawable(R.color.background_color_deep));
 
-		activity = this;
 		resources = getResources();
 		mTitle = mDrawerTitle = getTitle();
 		mMenuTitles = new ArrayList<HashMap<String, Object>>();
 
 		HashMap<String, Object> map0 = new HashMap<String, Object>();
-		map0.put("menuImage", android.R.drawable.ic_menu_agenda);
-		map0.put("menuText", "Home");
+		map0.put("menuImage", android.R.drawable.ic_menu_search);
+		map0.put("menuText", "搜索");
 		mMenuTitles.add(map0);
-
+		
 		HashMap<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("menuImage", android.R.drawable.ic_menu_sort_by_size);
-		map1.put("menuText", "Show");
+		map1.put("menuImage", android.R.drawable.ic_menu_agenda);
+		map1.put("menuText", "主页");
 		mMenuTitles.add(map1);
 
 		HashMap<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("menuImage", android.R.drawable.ic_menu_manage);
-		map2.put("menuText", "Setting");
+		map2.put("menuImage", android.R.drawable.ic_menu_sort_by_size);
+		map2.put("menuText", "菜单");
 		mMenuTitles.add(map2);
 
 		HashMap<String, Object> map3 = new HashMap<String, Object>();
-		map3.put("menuImage", android.R.drawable.ic_menu_info_details);
-		map3.put("menuText", "About");
+		map3.put("menuImage", android.R.drawable.ic_menu_manage);
+		map3.put("menuText", "设置");
 		mMenuTitles.add(map3);
+
+		HashMap<String, Object> map4 = new HashMap<String, Object>();
+		map4.put("menuImage", android.R.drawable.ic_menu_info_details);
+		map4.put("menuText", "关于");
+		mMenuTitles.add(map4);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -133,18 +137,21 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	public void closeSearchAction(){
+		searchItem.collapseActionView();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 
 		searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
+		searchItem = menu.findItem(R.id.action_search);
 		searchView = (SearchView) menu.findItem(R.id.action_search)
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getComponentName()));
-
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 			@Override
@@ -152,13 +159,16 @@ public class MainActivity extends FragmentActivity {
 				// 启动页面
 				Document.MainDoc().server.prompt = query;
 				
+				selectItem(0);
+				
 				fragment = new SearchFragment();
-				fragmentManager = getSupportFragmentManager();
-				fragmentManager.beginTransaction()
-						.replace(R.id.content_frame, fragment).commit();
-
+				FragmentTransaction fragmentTransaction = fragmentManager
+						.beginTransaction();
+				fragmentTransaction.replace(R.id.content_frame, fragment);
+				fragmentTransaction.commit();
 				searchView.clearFocus();
 
+				
 				return false;
 			}
 
@@ -195,7 +205,6 @@ public class MainActivity extends FragmentActivity {
 			item.collapseActionView();
 			return true;
 		case android.R.id.home:
-
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -218,30 +227,29 @@ public class MainActivity extends FragmentActivity {
 			mDrawerLayout.closeDrawer(mDrawerList);
 			return;
 		}
-		// mDrawerList.setItemChecked(position, true);
 
 		switch (position) {
 		case 0:
-			if (Document.MainDoc().shop.shopName == null) {
-				fragment = new GuideFragment();
-			} else {
-				fragment = new MainView();
-			}
+			fragment = new GuideFragment();
 			break;
 		case 1:
-			fragment = new ShowFragment();
+			fragment = new MainView();
 			break;
 		case 2:
-			fragment = new SettingFragment();
+			fragment = new ShowFragment();
 			break;
 		case 3:
+			fragment = new SettingFragment();
+			break;
+		case 4:
 			fragment = new AboutFragment();
 			break;
 		default:
-			fragment = new MainView();
+			fragment = new GuideFragment();
 			break;
 		}
 		Bundle args = new Bundle();
+		
 		args.putInt("MENU_ID", position);
 		fragment.setArguments(args);
 
@@ -250,6 +258,8 @@ public class MainActivity extends FragmentActivity {
 		fragmentTransaction.replace(R.id.content_frame, fragment);
 		// fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		fragmentTransaction.commit();
+		
+		
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);
 		setTitle((String) (mMenuTitles.get(position).get("menuText")));

@@ -1,10 +1,10 @@
 package com.jason.diner;
 
-//import android.app.Fragment;
-//import android.app.FragmentManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -31,6 +31,7 @@ public class SearchFragment extends Fragment implements UIInterface {
 	private ListView searchList;
 	private MySearchAdapter searchAdapter;
 	private View rootView;
+	private ProgressDialog progressbar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class SearchFragment extends Fragment implements UIInterface {
 	public void updateData(String json) {
 		// TODO Auto-generated method stub
 		if(!Helper.json2Search(json, Document.MainDoc().search)){
-			Toast.makeText(Document.MainDoc().mainActivity.activity, "请求数据异常，请重试！",
+			Toast.makeText(Document.MainDoc().mainActivity, "请求数据异常，请重试！",
 				     Toast.LENGTH_SHORT).show();
 		}else{
 			for (ShopInfo item : Document.MainDoc().search.searchList) {
@@ -54,14 +55,15 @@ public class SearchFragment extends Fragment implements UIInterface {
 				map.put(ShopInfoKey.shopIntroduce, item.shopIntroduce);
 				Document.MainDoc().search.searchListBlinding.add(map);
 			}
+			
 		}
-
+		progressbar.dismiss();
 	}
 
 	@Override
 	public void updateUI() {
 		searchList = (ListView) rootView.findViewById(R.id.searchList);
-		searchAdapter = new MySearchAdapter(Document.MainDoc().mainActivity.activity,
+		searchAdapter = new MySearchAdapter(Document.MainDoc().mainActivity,
 				Document.MainDoc().search.searchListBlinding);
 		searchList.setAdapter(searchAdapter);
 		searchList
@@ -71,6 +73,8 @@ public class SearchFragment extends Fragment implements UIInterface {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 
+						Document.MainDoc().mainActivity.closeSearchAction();
+						
 						Document.MainDoc().shop = Document.MainDoc().search.searchList.get(position);
 						Fragment fragment = new MainView();
 
@@ -80,15 +84,7 @@ public class SearchFragment extends Fragment implements UIInterface {
 						// selectShop.get("shopId"));
 						// fragment.setArguments(args);
 
-						// Document.MainDoc().mainActivity.selectItem(0);
-
-						//Document.MainDoc().mainActivity.selectItem(0);
-						FragmentManager fragmentManager = getFragmentManager();
-						FragmentTransaction fragmentTransaction = fragmentManager
-								.beginTransaction();
-						fragmentTransaction.add(R.id.content_frame, fragment);
-						// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-						fragmentTransaction.commit();
+						Document.MainDoc().mainActivity.selectItem(1);
 					}
 
 				});
@@ -99,10 +95,17 @@ public class SearchFragment extends Fragment implements UIInterface {
 			Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.search_shop, container, false);
 		
-		MyAsyncTask mTask = new MyAsyncTask(this);
 		String param = "keyword=" + Document.MainDoc().server.prompt;
-		mTask.execute(Document.MainDoc().server.getSearchUrl(param));
-
+		String oldParam = Document.MainDoc().server.paramSearch;
+		if(oldParam != null && oldParam.trim().equals(param)){
+			updateUI();
+		}else{
+			Document.MainDoc().server.paramSearch = param;
+			MyAsyncTask mTask = new MyAsyncTask(this);
+			mTask.execute(Document.MainDoc().server.getSearchUrl(param));
+			progressbar = ProgressDialog.show(Document.MainDoc().mainActivity, "Loading...", "Please wait...", true, false);
+		}
+		
 		return rootView;
 	}
 }

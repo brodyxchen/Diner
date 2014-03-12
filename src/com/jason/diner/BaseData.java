@@ -17,6 +17,12 @@ class ServerInfo{
 	public String conditionAddress;
 	public String orderAddress;
 	
+	//保存上一次的请求参数，防止重复请求
+	public String paramSearch;
+	public String paramShop;
+	public String paramRule;
+	public String paramOrder;
+	
 	public String prompt;
 	ServerInfo(){
 		url = "http://mqstreetball.51a.net222-2.net"; //"http://172.20.143.97/myorder";
@@ -24,6 +30,11 @@ class ServerInfo{
 		shopAddress = "/selectedShop.php";
 		conditionAddress = "/getRule.php";
 		orderAddress = "/getList.php";
+		
+		paramSearch = null;
+		paramShop = null;
+		paramRule = null;
+		paramOrder = null;
 	}
 	
 	public String getSearchUrl(String param){

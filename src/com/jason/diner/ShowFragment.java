@@ -1,22 +1,20 @@
 package com.jason.diner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,12 +29,13 @@ public class ShowFragment extends Fragment implements UIInterface {
 	private ListView showList;
 	private View rootView;
 	private ArrayList<Integer> indexList;
+	private ProgressDialog progressbar;
 
 	@Override
 	public void updateData(String json) {
 		// TODO Auto-generated method stub
 		if (!Helper.json2Order(json, Document.MainDoc().order)) {
-			Toast.makeText(Document.MainDoc().mainActivity.activity,
+			Toast.makeText(Document.MainDoc().mainActivity,
 					"请求数据异常，请重试！", Toast.LENGTH_SHORT).show();
 		} else {
 
@@ -66,6 +65,7 @@ public class ShowFragment extends Fragment implements UIInterface {
 			}
 
 		}
+		progressbar.dismiss();
 
 	}
 
@@ -73,7 +73,7 @@ public class ShowFragment extends Fragment implements UIInterface {
 	public void updateUI() {
 		// TODO Auto-generated method stub
 		MyShowAdapter adapter = new MyShowAdapter(
-				Document.MainDoc().mainActivity.activity,
+				Document.MainDoc().mainActivity,
 				Document.MainDoc().order);
 		showList.setAdapter(adapter);
 		Document.MainDoc().mainActivity.mDrawerList.setItemChecked(1, true);
@@ -87,10 +87,19 @@ public class ShowFragment extends Fragment implements UIInterface {
 		rootView = inflater.inflate(R.layout.show_fragment, container, false);
 		showList = (ListView) rootView.findViewById(R.id.showList);
 
-		MyAsyncTask mTask = new MyAsyncTask(this);
 		String param = "rule=" + Helper.rule2Json(Document.MainDoc().rule);
-		mTask.execute(Document.MainDoc().server.getOrderUrl(null));
+		String oldParam = Document.MainDoc().server.paramOrder;
+		if(oldParam != null && oldParam.trim().equals(param)){
+			updateUI();
+		}else{
+			Document.MainDoc().server.paramOrder = param;
+			MyAsyncTask mTask = new MyAsyncTask(this);
+			mTask.execute(Document.MainDoc().server.getOrderUrl(null));
+			progressbar = ProgressDialog.show(Document.MainDoc().mainActivity, "Loading...", "Please wait...", true, false);
+		}
 
+		
+		
 		return rootView;
 	}
 
