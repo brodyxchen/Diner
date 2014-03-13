@@ -87,6 +87,10 @@ public class ShowFragment extends Fragment implements UIInterface {
 		rootView = inflater.inflate(R.layout.show_fragment, container, false);
 		showList = (ListView) rootView.findViewById(R.id.showList);
 
+		if(Document.MainDoc().rule.shopId == null){
+			return rootView;
+		}
+		
 		String param = "rule=" + Helper.rule2Json(Document.MainDoc().rule);
 		String oldParam = Document.MainDoc().server.paramOrder;
 		if(oldParam != null && oldParam.trim().equals(param)){

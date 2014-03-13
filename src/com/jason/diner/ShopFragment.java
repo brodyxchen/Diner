@@ -83,6 +83,9 @@ public class ShopFragment extends Fragment implements UIInterface{
 			Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.shop_fragment, container, false);
 		shop = Document.MainDoc().shop;
+		if(shop.shopId == null && shop.shopName == null){
+			return rootView;
+		}
 		shopImage = (ImageView) rootView.findViewById(R.id.shopImage);
 		shopName = (TextView) rootView.findViewById(R.id.shopName);
 		shopAddress = (TextView) rootView.findViewById(R.id.shopAddress);

@@ -37,6 +37,11 @@ public class RuleFragment extends Fragment implements UIInterface {
             Bundle savedInstanceState) {
     	
     	rootView = inflater.inflate(R.layout.rule_fragment, container, false);
+    	ShopInfo shop = Document.MainDoc().shop;
+		if(shop.shopId == null && shop.shopName == null){
+			return rootView;
+		}
+    	
     	
 		checkBoxList = new HashMap<String, ArrayList<ViewPair>>();
 		picker1 = (NumberPicker) rootView.findViewById(R.id.ruleNumberPicker1);
