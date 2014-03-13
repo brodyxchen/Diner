@@ -24,9 +24,9 @@ public class NavActivity extends Activity {
 	private PagerTitleStrip mPagerTitleStrip;// 声明动画标题
 	private ImageView mPageImg;// 动画图片
 	private int currIndex = 0;// 当前页面
-	private ImageView mPage0, mPage1, mPage2, mPage3, mPage4, mPage5;// 声明导航图片对象
+	private ImageView mPage0, mPage1, mPage2;// 声明导航图片对象
 
-	private final int COUNT = 6;
+	private final int COUNT = 3;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,14 +46,10 @@ public class NavActivity extends Activity {
 		mPage0 = (ImageView) findViewById(R.id.page0);
 		mPage1 = (ImageView) findViewById(R.id.page1);
 		mPage2 = (ImageView) findViewById(R.id.page2);
-		mPage3 = (ImageView) findViewById(R.id.page3);
-		mPage4 = (ImageView) findViewById(R.id.page4);
-		mPage5 = (ImageView) findViewById(R.id.page5);
 
 		// 将要分页显示的View装入数组中
 		int[] welcomImg = { R.drawable.welcome0, R.drawable.welcome1,
-				R.drawable.welcome2, R.drawable.welcome3, R.drawable.welcome4,
-				R.drawable.welcome5 };
+				R.drawable.welcome2};
 
 		LayoutInflater mLi = LayoutInflater.from(this);
 		final ArrayList<View> views = new ArrayList<View>();
@@ -130,50 +126,10 @@ public class NavActivity extends Activity {
 					animation = new TranslateAnimation(arg0 + 1, arg0, 0, 0);
 				}
 				break;
-			case 2: // 页面三
+			case 2:
 				mPage2.setImageDrawable(getResources().getDrawable(
 						R.drawable.point_dark));
 				mPage1.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));
-				mPage3.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));
-				if (currIndex == arg0 - 1) {
-					animation = new TranslateAnimation(arg0 - 1, arg0, 0, 0);
-				} else if (currIndex == arg0 + 1) {
-					animation = new TranslateAnimation(arg0 + 1, arg0, 0, 0);
-				}
-				break;
-			case 3:
-				mPage3.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_dark));
-				mPage4.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));
-				mPage2.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));
-				if (currIndex == arg0 - 1) {
-					animation = new TranslateAnimation(arg0 - 1, arg0, 0, 0);
-
-				} else if (currIndex == arg0 + 1) {
-					animation = new TranslateAnimation(arg0 + 1, arg0, 0, 0);
-				}
-				break;
-			case 4:
-				mPage4.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_dark));
-				mPage3.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));
-				mPage5.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));
-				if (currIndex == arg0 - 1) {
-					animation = new TranslateAnimation(arg0 - 1, arg0, 0, 0);
-				} else if (currIndex == arg0 + 1) {
-					animation = new TranslateAnimation(arg0 + 1, arg0, 0, 0);
-				}
-				break;
-			case 5:
-				mPage5.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_dark));
-				mPage4.setImageDrawable(getResources().getDrawable(
 						R.drawable.point_light));
 
 				if (currIndex == arg0 - 1) {

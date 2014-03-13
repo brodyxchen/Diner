@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">指尖点菜</string>
-
+    <string name="app_name">点菜大师</string>
+	<string name="enter_app">直接进入点菜大师</string>
+ 	
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_search">search</string>
@@ -28,6 +29,8 @@
     <string name="Setting_Server_online">在线</string>
     <string name="Setting_Server_defined">自定义</string>
     <string name="Setting_Server_defined_hint">输入服务器地址</string>
+    <string name="Setting_Welcome_content">观赏欢迎界面</string>
+    
     <string name="Setting_Cancel">默认</string>
     <string name="Setting_Apply">应用</string>
     

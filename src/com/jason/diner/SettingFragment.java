@@ -1,6 +1,8 @@
 package com.jason.diner;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,7 @@ public class SettingFragment extends Fragment {
 	private RadioGroup radioGroup0;
 	private RadioButton radioButton0, radioButton2;
 	private EditText editText;
-	private Button cancelButton, applyButton;
+	private Button startWelcome, cancelButton, applyButton;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +54,17 @@ public class SettingFragment extends Fragment {
 			}
 		});
 
+		startWelcome = (Button) rootView.findViewById(R.id.startWelcome);
+		startWelcome.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent mainIntent = new Intent(Document.MainDoc().mainActivity, NavActivity.class);
+				Document.MainDoc().mainActivity.startActivity(mainIntent);
+			}
+		});
+		
+		
 		cancelButton = (Button) rootView.findViewById(R.id.SettingCancel);
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 
@@ -85,5 +98,6 @@ public class SettingFragment extends Fragment {
 
 		return rootView;
 	}
+	
 
 }
