@@ -227,6 +227,14 @@ public class RuleFragment extends Fragment implements IUpdate {
 									screemW / col / 3 * 2,
 									ViewGroup.LayoutParams.WRAP_CONTENT);
 					tv.setText(value.get(index));
+					tv.setTag(cb);
+					tv.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							CheckBox cb = (CheckBox)v.getTag();
+							cb.setChecked(!cb.isChecked());
+						}
+					});
 					ColorStateList csl2 = 
 							(ColorStateList) resource.getColorStateList(
 									R.color.font_gray_normal);  

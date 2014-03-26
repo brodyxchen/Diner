@@ -11,6 +11,7 @@ package com.jason.diner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,15 +20,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.jason.Interface.IUpdate;
-import com.jason.Task.ImageLoadTask;
 import com.jason.Task.FragmentLoadTask;
+import com.jason.Task.ImageLoadTask;
 
 /**
  * ≤Õπ›ΩÁ√Ê
@@ -90,7 +94,21 @@ public class ShopFragment extends Fragment implements IUpdate{
 		topAdapter = new MyShopAdapter(Document.MainDoc().mainActivity,
 				Document.MainDoc().shop.topListBlinding);
 		topList.setAdapter(topAdapter);
-		topList.smoothScrollToPosition(0);
+		//topList.smoothScrollToPosition(0);
+		
+		topList.setOnItemClickListener(new OnItemClickListener() {
+	        @Override
+	        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+	                long arg3) {
+	        	MyShopAdapter.ViewHolder holder = (MyShopAdapter.ViewHolder)arg1.getTag();
+	        	CheckBox cb = holder.checkbox;
+	        	String dishId = (String)cb.getTag();
+	        	cb.setChecked(!cb.isChecked());
+				Document.MainDoc().shop.selectedTopList.put(dishId,
+						cb.isChecked());
+	        }
+	    });
+		
 	}
 
 	@Override
@@ -142,6 +160,9 @@ public class ShopFragment extends Fragment implements IUpdate{
 		return rootView;
 	}
 
+	
+
+	
 }
 
 /**
@@ -232,18 +253,18 @@ class MyShopAdapter extends BaseAdapter {
 		holder.checkbox.setChecked(
 				Document.MainDoc().shop.selectedTopList.get(dishId));
 		holder.checkbox.setTag(dishId);
-		holder.checkbox.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				CheckBox cb = (CheckBox)arg0;
-				String dishId = (String)cb.getTag();
-				Document.MainDoc().shop.selectedTopList.put(dishId,
-						cb.isChecked());
-
-			}
-		});
+//		holder.checkbox.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				CheckBox cb = (CheckBox)arg0;
+//				String dishId = (String)cb.getTag();
+//				Document.MainDoc().shop.selectedTopList.put(dishId,
+//						cb.isChecked());
+//
+//			}
+//		});
 		
 		
 		String address = (String) map.get(DishInfo.KEYS.DISH_IMAGE);
@@ -269,7 +290,7 @@ class MyShopAdapter extends BaseAdapter {
 
 	}
 	
-	class ViewHolder{
+	public class ViewHolder{
 		ImageView dishImage;
 		TextView dishName;
 		TextView dishFood;

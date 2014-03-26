@@ -43,7 +43,12 @@ public class Httper {
 	 */
 	public static Bitmap loadImage(String url) {
 		Bitmap bitmap = null;
-		HttpClient client = new DefaultHttpClient();
+		
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParameters, 10*1000);
+		HttpConnectionParams.setSoTimeout(httpParameters, 20*1000);
+		
+		HttpClient client = new DefaultHttpClient(httpParameters);
 		HttpResponse response = null;
 		InputStream inputStream = null;
 		try {
