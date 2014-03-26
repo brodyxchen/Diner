@@ -38,10 +38,15 @@ import com.jason.Task.FragmentLoadTask;
  */
 public class RuleFragment extends Fragment implements IUpdate {
 
-	private Button createShow;
+	private Button submit;			//提交规则（创建菜单）
 	private View rootView ;
+	
+	//存储用户选择的规则信息
 	private HashMap<String, ArrayList<ViewPair>> checkBoxList;
+	
 	private ProgressDialog progressbar;
+	
+	//几荤几素几汤 的NumberPicker
 	private NumberPicker picker1, picker2, picker3;
 	
     @Override
@@ -54,6 +59,7 @@ public class RuleFragment extends Fragment implements IUpdate {
 			return rootView;
 		}
     	
+		//设置NumberPicker
 		checkBoxList = new HashMap<String, ArrayList<ViewPair>>();
 		picker1 = (NumberPicker) rootView.findViewById(R.id.ruleNumberPicker1);
 		picker1.setMaxValue(8);
@@ -68,8 +74,12 @@ public class RuleFragment extends Fragment implements IUpdate {
 		picker3.setMinValue(0);
 		picker3.setValue(1);
     	
-		createShow = (Button)rootView.findViewById(R.id.createShow);
-		createShow.setOnClickListener(new View.OnClickListener() {
+		submit = (Button)rootView.findViewById(R.id.createShow);
+		
+		/**
+		 * 设置提交按钮的监听事件
+		 */
+		submit.setOnClickListener(new View.OnClickListener() {
 			
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -108,14 +118,16 @@ public class RuleFragment extends Fragment implements IUpdate {
 			}
 		});
 		
+		//提交到服务器
 		updateHttp();
 		
-		
-
 		return rootView;
     }
     
 
+    /**
+     * 提交到服务器
+     */
     @Override
     public void updateHttp(){
 		String param = "rule=rule";
@@ -126,6 +138,8 @@ public class RuleFragment extends Fragment implements IUpdate {
 			Document.MainDoc().server.paramRule = param;
 			FragmentLoadTask mTask = new FragmentLoadTask(this);
 			mTask.execute(Document.MainDoc().server.getConditionUrl(null));
+			
+			//显示加载条
 			progressbar = ProgressDialog.show(
 					Document.MainDoc().mainActivity, "Loading...",
 					"Please wait...", true, false);
@@ -140,19 +154,29 @@ public class RuleFragment extends Fragment implements IUpdate {
 				     Toast.LENGTH_SHORT).show();
 			Document.MainDoc().server.clearParam();
 		}
+		
+		//结束加载条
 		progressbar.dismiss();
 	}
 
+	/**
+	 * 更新UI
+	 */
 	@Override
 	public void updateUI() {
+		//第一层布局（最外层）
 		RelativeLayout ruleMain = 
 				(RelativeLayout) rootView.findViewById(R.id.ruleMain);
+		
+		//获取从服务器得到的规则条件信息
 		ConditionInfo ruleInfo = Document.MainDoc().condition;
 		int screemW = Document.MainDoc().screenWidth;
 		Iterator iter = ruleInfo.conditions.entrySet().iterator();
 		
 		int belowId = R.id.ruleArea0;
 		int idIndex = 1;
+		
+		//根据条件信息，自动创建UI布局
 		while(iter.hasNext()){
 			Map.Entry<String, ArrayList<String>> entry = 
 					(Map.Entry<String, ArrayList<String>>) iter.next();
@@ -161,7 +185,7 @@ public class RuleFragment extends Fragment implements IUpdate {
 			ArrayList<String> value = entry.getValue();
 			ArrayList<ViewPair> pairList = new ArrayList<ViewPair>();
 			
-			//LinearLayout Area
+			//第二层布局
 			LinearLayout ruleArea = 
 					new LinearLayout(Document.MainDoc().mainActivity);
 			ruleArea.setBackgroundResource(R.color.background_gray_light);
@@ -177,6 +201,7 @@ public class RuleFragment extends Fragment implements IUpdate {
 			areaParam.topMargin = 10;
 			ruleMain.addView(ruleArea, areaParam);
 
+			//条件（/规则）分组标题
 			TextView ruleHead = new TextView(Document.MainDoc().mainActivity);
 			
 			Resources resource = Document.MainDoc().mainActivity.resources;
@@ -194,11 +219,12 @@ public class RuleFragment extends Fragment implements IUpdate {
 			headParam.leftMargin = 5;
 			ruleArea.addView(ruleHead, headParam);
 			
-			
+			//分组的内容（里面的CheckBox和TextView 每4对一行，防止一行太拥挤）
 			int size = value.size();
 			int col = 4;
 			int row = (int)Math.ceil((double) size / col);
 			
+			//遍历可能的行数
 			for(int i = 0; i < row; i++){
 				LinearLayout ruleZone = 
 						new LinearLayout(Document.MainDoc().mainActivity);
@@ -210,6 +236,7 @@ public class RuleFragment extends Fragment implements IUpdate {
 				ruleZone.setOrientation(LinearLayout.HORIZONTAL);
 				ruleArea.addView(ruleZone, zoneParam);
 				
+				//对每一行的4列，创建CheckBox和TextView对，最后一行不满4对的特殊处理
 				for(int j = 0; j < col; j++){
 					int index = i*col + j;
 					if(index >= size)
@@ -249,6 +276,7 @@ public class RuleFragment extends Fragment implements IUpdate {
 				}
 			}
 			
+			//UI上的分割线
 			View divider = new View(Document.MainDoc().mainActivity);
 			LinearLayout.LayoutParams dividerParam = 
 					new LinearLayout.LayoutParams(
@@ -256,6 +284,7 @@ public class RuleFragment extends Fragment implements IUpdate {
 			divider.setBackgroundResource(R.color.divider_gray_normal);
 			ruleArea.addView(divider, dividerParam);
 
+			//存储创建的所有CheckBox和TextView
 			checkBoxList.put(key, pairList);
 			
 		}
@@ -263,6 +292,11 @@ public class RuleFragment extends Fragment implements IUpdate {
 		
 	}
 
+	/**
+	 * 把一个CheckBox和一个TextView绑到一起的类
+	 * @author Jason
+	 *
+	 */
     class ViewPair{
     	public CheckBox checkBox;
     	public TextView textView;

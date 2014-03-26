@@ -1,9 +1,9 @@
 /*
- * Classname
+ * NavActivity
  *
- * Version information
+ * Version 1.0
  *
- * Date
+ * 2014-03-26
  *
  * Copyright notice
  */
@@ -17,7 +17,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -27,13 +26,16 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+/**
+ * 导航页（应用第一次启动时出现）
+ * @author Jason
+ *
+ */
 public class NavActivity extends Activity {
 
-	private ViewPager mViewPager;// 声明ViewPager对象
-	private PagerTitleStrip mPagerTitleStrip;// 声明动画标题
-	private ImageView mPageImg;// 动画图片
-	private int currIndex = 0;// 当前页面
-	private ImageView mPage0, mPage1, mPage2;// 声明导航图片对象
+	private ViewPager mViewPager;				//ViewPager对象
+	private int currIndex = 0;					//当前页面坐标
+	private ImageView mPage0, mPage1, mPage2;	//导航图片对象
 
 	private final int COUNT = 3;
 
@@ -50,13 +52,11 @@ public class NavActivity extends Activity {
 
 		mViewPager = (ViewPager) findViewById(R.id.viewpager);
 		mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
-		mPagerTitleStrip = (PagerTitleStrip) findViewById(R.id.pagertitle);
 
 		mPage0 = (ImageView) findViewById(R.id.page0);
 		mPage1 = (ImageView) findViewById(R.id.page1);
 		mPage2 = (ImageView) findViewById(R.id.page2);
 
-		// 将要分页显示的View装入数组中
 		int[] welcomImg = { R.drawable.welcome0, R.drawable.welcome1,
 				R.drawable.welcome2};
 
@@ -72,7 +72,7 @@ public class NavActivity extends Activity {
 			titles.add("" + i);
 		}
 
-		// 填充ViewPager的数据适配器，我们重写即可
+		//重写ViewPager的适配器
 		PagerAdapter mPagerAdapter = new PagerAdapter() {
 
 			@Override
@@ -113,35 +113,43 @@ public class NavActivity extends Activity {
 	 */
 	public class MyOnPageChangeListener implements OnPageChangeListener {
 
-		public void onPageSelected(int arg0) {// 参数arg0为选中的View
+		/**
+		 * 选中某页是的处理方法
+		 */
+		public void onPageSelected(int arg0) {
 
-			Animation animation = null;// 声明动画对象
+			Animation animation = null;		//声明动画对象
 			switch (arg0) {
-			case 0: // 页面一
+			case 0: //页面0
+				//进入第一个导航页面，小圆点为选中状态，下一个页面的小圆点是未选中状态。
 				mPage0.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_dark));// 进入第一个导航页面，小圆点为选中状态，下一个页面的小圆点是未选中状态。
+						R.drawable.point_dark));
 				mPage1.setImageDrawable(getResources().getDrawable(
 						R.drawable.point_light));
 				if (currIndex == arg0 + 1) {
-					animation = new TranslateAnimation(arg0 + 1, arg0, 0, 0);// 圆点移动效果动画，从当前View移动到下一个View
-				}
-				break;
-			case 1: // 页面二
-				mPage1.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_dark));// 当前View
-				mPage0.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));// 上一个View
-				mPage2.setImageDrawable(getResources().getDrawable(
-						R.drawable.point_light));// 下一个View
-				if (currIndex == arg0 - 1) {// 如果滑动到上一个View
-					animation = new TranslateAnimation(arg0 - 1, arg0, 0, 0); // 圆点移动效果动画，从当前View移动到下一个View
-
-				} else if (currIndex == arg0 + 1) {// 圆点移动效果动画，从当前View移动到下一个View，下同。
-
+					//圆点移动效果动画，从当前View移动到下一个View
 					animation = new TranslateAnimation(arg0 + 1, arg0, 0, 0);
 				}
 				break;
-			case 2:
+			case 1: //页面1
+				mPage1.setImageDrawable(getResources().getDrawable(
+						R.drawable.point_dark));		//当前View
+				mPage0.setImageDrawable(getResources().getDrawable(
+						R.drawable.point_light));		//上一个View
+				mPage2.setImageDrawable(getResources().getDrawable(
+						R.drawable.point_light));		//下一个View
+				
+				
+				if (currIndex == arg0 - 1) {//如果滑动到上一个View
+					//圆点移动效果动画，从当前View移动到下一个View
+					animation = new TranslateAnimation(arg0 - 1, arg0, 0, 0); 
+
+				} else if (currIndex == arg0 + 1) {//如果滑动到下一个View
+					//圆点移动效果动画，从当前View移动到下一个View
+					animation = new TranslateAnimation(arg0 + 1, arg0, 0, 0);
+				}
+				break;
+			case 2: //页面2
 				mPage2.setImageDrawable(getResources().getDrawable(
 						R.drawable.point_dark));
 				mPage1.setImageDrawable(getResources().getDrawable(
@@ -152,9 +160,9 @@ public class NavActivity extends Activity {
 				}
 				break;
 			}
-			currIndex = arg0;// 设置当前View
-			animation.setFillAfter(true);// True:设置图片停在动画结束位置
-			animation.setDuration(300);// 设置动画持续时间
+			currIndex = arg0;				//设置当前View
+			animation.setFillAfter(true);	//True:设置图片停在动画结束位置
+			animation.setDuration(300);		//设置动画持续时间
 		}
 
 		@Override

@@ -40,12 +40,14 @@ import com.jason.Task.ImageLoadTask;
  */
 public class ShopFragment extends Fragment implements IUpdate{
 
+	//餐馆详情页控件
 	private ImageView shopImage;
 	private TextView shopName, shopAddress, shopIntroduce;
-	private ShopInfo shop;
+		
+	private ShopInfo shop;				//餐馆信息
 	private View rootView;
-	private ListView topList;
-	private MyShopAdapter topAdapter;
+	private ListView topList;			//推荐菜列表
+	private MyShopAdapter topAdapter;	//推荐菜适配器
 	private ProgressDialog progressbar;
 
 
@@ -58,14 +60,15 @@ public class ShopFragment extends Fragment implements IUpdate{
 
 	@Override
 	public void updateData(String json) {
-		// TODO Auto-generated method stub
-
+		
 		if(!Helper.json2Shop(json, Document.MainDoc().shop)){
 			Toast.makeText(Document.MainDoc().mainActivity,
 					"网络连接异常，请检查网络并重试",
 				     Toast.LENGTH_SHORT).show();
 			Document.MainDoc().server.clearParam();
 		}else{
+			
+			//构造绑定topList的数据
 			for (DishInfo item : Document.MainDoc().shop.topList) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put(DishInfo.KEYS.DISH_ID, item.dishId);
@@ -82,20 +85,21 @@ public class ShopFragment extends Fragment implements IUpdate{
 			}
 		}
 		
+		//关闭加载条
 		progressbar.dismiss();
 		
 	}
 
 	@Override
 	public void updateUI() {
-		// TODO Auto-generated method stub
-
+		
 		topList = (ListView) rootView.findViewById(R.id.topList);
 		topAdapter = new MyShopAdapter(Document.MainDoc().mainActivity,
 				Document.MainDoc().shop.topListBlinding);
 		topList.setAdapter(topAdapter);
 		//topList.smoothScrollToPosition(0);
 		
+		//设置点击事件（点击每一项，等同于点击上面的CheckBox）
 		topList.setOnItemClickListener(new OnItemClickListener() {
 	        @Override
 	        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -116,8 +120,10 @@ public class ShopFragment extends Fragment implements IUpdate{
 		String param = "shopId=" + Document.MainDoc().shop.shopId;
 		String oldParam = Document.MainDoc().server.paramShop;
 		if(oldParam != null && oldParam.trim().equals(param)){
+			//不是第一次请求，并且参数重复，则直接更新UI，不会从服务器请求数据
 			updateUI();
 		}else{
+			//否则，从服务器请求数据
 			Document.MainDoc().server.paramShop = param;
 			FragmentLoadTask mTask = new FragmentLoadTask(this);
 			mTask.execute(Document.MainDoc().server.getShopUrl(param));
@@ -144,6 +150,7 @@ public class ShopFragment extends Fragment implements IUpdate{
 		shopAddress.setText(shop.shopAddress);
 		shopIntroduce.setText(shop.shopIntroduce);
 		
+		//异步加载图片
 		Bitmap bitmap = Document.MainDoc().imageCache.getImage(shop.shopImage);
 		if(bitmap == null){
 			shopImage.setImageBitmap(
@@ -153,9 +160,8 @@ public class ShopFragment extends Fragment implements IUpdate{
 			shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
 		}
 
-
+		//执行网络连接请求
 		updateHttp();
-		
 		
 		return rootView;
 	}
@@ -172,7 +178,7 @@ public class ShopFragment extends Fragment implements IUpdate{
  */
 class MyShopAdapter extends BaseAdapter {
 
-	// 要使用到的数据源
+	//要使用到的数据源
 	private ArrayList<HashMap<String, Object>> data = null;
 	private Context context;
 	private LayoutInflater inflater;
@@ -185,32 +191,29 @@ class MyShopAdapter extends BaseAdapter {
 
 	}
 
-	// item的总行数
+	//item的总行数
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return data == null ? 0 : data.size();
 	}
 
-	// item对象
+	//item对象
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return (position >= 0 && position < data.size()) ? data.get(position)
 				: null;
 	}
 
-	// item的id
+	//item的id
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
-	// 绘制每一个item
+	//绘制每一个item
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
+
 		ViewHolder holder;
 		HashMap<String, Object> map = (HashMap<String, Object>) getItem(position);
 
@@ -253,6 +256,7 @@ class MyShopAdapter extends BaseAdapter {
 		holder.checkbox.setChecked(
 				Document.MainDoc().shop.selectedTopList.get(dishId));
 		holder.checkbox.setTag(dishId);
+		
 //		holder.checkbox.setOnClickListener(new View.OnClickListener() {
 //			
 //			@Override
@@ -266,17 +270,19 @@ class MyShopAdapter extends BaseAdapter {
 //			}
 //		});
 		
-		
+		//异步加载图片
 		String address = (String) map.get(DishInfo.KEYS.DISH_IMAGE);
 		Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
 		if (bitmap != null) {
 			holder.dishImage.setImageBitmap( Helper.toRoundCorner(bitmap));
 		} else {
+			//先设置成默认图片
 			holder.dishImage.setImageBitmap(
 					Helper.toRoundCorner(
 							Helper.Drawable2Bitmap(
 									R.drawable.default_dish)));
 			if(!Document.MainDoc().imageCache.getDownloading(address)){
+				//若之前没有请求下载，现在就请求下载图片
 				ImageLoadTask imageLoadTask = new ImageLoadTask();
 				String url = Document.MainDoc().server.url;
 				imageLoadTask.execute(url, address, this);// 执行异步任务
@@ -285,9 +291,7 @@ class MyShopAdapter extends BaseAdapter {
 			
 		}
 		
-
 		return convertView;
-
 	}
 	
 	public class ViewHolder{

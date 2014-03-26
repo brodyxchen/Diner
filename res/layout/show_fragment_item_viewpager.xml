@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?android:attr/textColorSecondary" />
+            android:textColor="@color/font_color_deep" />
 
         <TextView
             android:id="@+id/dishFood"
@@ -37,7 +37,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:attr/textColorSecondaryInverse" />
+            android:textColor="@color/font_gray_normal" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -70,7 +70,7 @@
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorTertiary" />
+                    android:textColor="@color/font_gray_light" />
 
                 <TextView
                     android:id="@+id/dishCooking"
@@ -80,7 +80,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorSecondaryInverse" />
+                    android:textColor="@color/font_gray_light" />
             </RelativeLayout>
 
             <TextView
@@ -91,7 +91,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="@color/font_gray_light" />
         </RelativeLayout>
     </LinearLayout>
 

@@ -36,8 +36,8 @@ import com.jason.Task.FragmentLoadTask;
  */
 public class SearchFragment extends Fragment implements IUpdate {
 
-	private ListView searchList;
-	private MySearchAdapter searchAdapter;
+	private ListView searchList;			//搜索结果的listView
+	private MySearchAdapter searchAdapter;	//搜索的适配器
 	private View rootView;
 	private ProgressDialog progressbar;
 
@@ -56,6 +56,8 @@ public class SearchFragment extends Fragment implements IUpdate {
 				     Toast.LENGTH_SHORT).show();
 			Document.MainDoc().server.clearParam();
 		}else{
+			
+			//构造绑定到searchList(ListView)的数据
 			for (ShopInfo item : Document.MainDoc().search.searchList) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put(ShopInfo.KEYS.SHOP_ID, item.shopId);
@@ -72,6 +74,8 @@ public class SearchFragment extends Fragment implements IUpdate {
 
 	@Override
 	public void updateUI() {
+		
+		//把数据绑定到searchList
 		searchList = (ListView) rootView.findViewById(R.id.searchList);
 		searchAdapter = new MySearchAdapter(Document.MainDoc().mainActivity,
 				Document.MainDoc().search.searchListBlinding);
@@ -84,13 +88,12 @@ public class SearchFragment extends Fragment implements IUpdate {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 
+						//切换到选择的项（切换 fragment）
 						Document.MainDoc().mainActivity.closeSearchAction();
-						
 						Document.MainDoc().shop = 
 								Document.MainDoc().search.
 								searchList.get(position);
 						Fragment fragment = new MainFragment();
-
 						Document.MainDoc().mainActivity.selectItem(1);
 					}
 
@@ -102,8 +105,10 @@ public class SearchFragment extends Fragment implements IUpdate {
 		String param = "keyword=" + Document.MainDoc().server.prompt;
 		String oldParam = Document.MainDoc().server.paramSearch;
 		if(oldParam != null && oldParam.trim().equals(param)){
+			//不是第一次加载并且关键字重复，直接更新UI
 			updateUI();
 		}else{
+			//否则，从服务器请求数据
 			Document.MainDoc().server.paramSearch = param;
 			FragmentLoadTask mTask = new FragmentLoadTask(this);
 			mTask.execute(Document.MainDoc().server.getSearchUrl(param));
@@ -131,7 +136,7 @@ public class SearchFragment extends Fragment implements IUpdate {
  */
 class MySearchAdapter extends BaseAdapter {
 
-	// 要使用到的数据源
+	//要使用到的数据源
 	private ArrayList<HashMap<String, Object>> data = null;
 
 	private LayoutInflater inflater;
@@ -145,14 +150,14 @@ class MySearchAdapter extends BaseAdapter {
 
 	}
 
-	// item的总行数
+	//item的总行数
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
 		return data == null ? 0 : data.size();
 	}
 
-	// item对象
+	//item对象
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
@@ -160,18 +165,17 @@ class MySearchAdapter extends BaseAdapter {
 				: null;
 	}
 
-	// item的id
+	//item的id
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return position;
 	}
 
-	// 绘制每一个item
+	//绘制每一个item
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-
+		
 		ViewHolder holder;
 		HashMap<String, Object> map = 
 				(HashMap<String, Object>) getItem(position);
@@ -192,6 +196,7 @@ class MySearchAdapter extends BaseAdapter {
 			holder = (ViewHolder)convertView.getTag();
 		}
 
+		//设置UI中显示的数据
 		holder.shopName.setText(
 				(String) map.get(ShopInfo.KEYS.SHOP_NAME));
 		holder.shopAddress.setText(
@@ -199,24 +204,18 @@ class MySearchAdapter extends BaseAdapter {
 		holder.shopIntroduce.setText(
 				(String) map.get(ShopInfo.KEYS.SHOP_INTRODUCE));
 
-		try {
-			String address = (String) map.get(ShopInfo.KEYS.SHOP_IMAGE);
-			Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
+		//异步加载图片
+		String address = (String) map.get(ShopInfo.KEYS.SHOP_IMAGE);
+		Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
 
-			if (bitmap != null) {
-				holder.shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
-			} else {// 缓存没有就设置为默认图片，并且从网络异步下载
-				holder.shopImage.setImageBitmap(
-						Helper.toRoundCorner(
-								Helper.Drawable2Bitmap(
-										R.drawable.icon)));
-				ImageLoadTask imageLoadTask = new ImageLoadTask();
-				String url = Document.MainDoc().server.url;
-				imageLoadTask.execute(url, address, this);// 执行异步任务
-			}
-		} catch (Exception e) {
-			Test.error("SearchFragment.MySearchAdapter.getView()",
-					e.toString());
+		if (bitmap != null) {
+			holder.shopImage.setImageBitmap(Helper.toRoundCorner(bitmap));
+		} else {// 缓存没有就设置为默认图片，并且从网络异步下载
+			holder.shopImage.setImageBitmap(Helper.toRoundCorner(Helper
+					.Drawable2Bitmap(R.drawable.icon)));
+			ImageLoadTask imageLoadTask = new ImageLoadTask();
+			String url = Document.MainDoc().server.url;
+			imageLoadTask.execute(url, address, this);// 执行异步任务
 		}
 
 		return convertView;

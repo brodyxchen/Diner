@@ -23,8 +23,10 @@ import android.graphics.Bitmap;
  */
 public class ImageCache {
 	
-	/** 存储图片的数据结构 */
+	//存储图片的数据结构
 	private HashMap<String, Bitmap> images;
+	
+	//存储已经开始下载了的图片连接（防止重复下载）
 	private HashSet<String> isDownloading;
 	
 	public ImageCache(){
@@ -50,13 +52,27 @@ public class ImageCache {
 		images.put(key, value);
 	}
 	
+	/**
+	 * 存入已经开始下载的图片连接
+	 * @param key 图片URI
+	 */
 	public void putDownloading(String key){
 		isDownloading.add(key);
 	}
 	
+	/**
+	 * 是否存入了此图片连接
+	 * @param key 图片URI
+	 * @return 此图片是否正在下载
+	 */
 	public boolean getDownloading(String key){
 		return isDownloading.contains(key);
 	}
+	
+	/**
+	 * 删除图片连接（图片下载失败时）
+	 * @param key 图片URI
+	 */
 	public void removeDownloading(String key){
 		isDownloading.remove(key);
 	}

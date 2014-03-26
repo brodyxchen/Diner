@@ -57,10 +57,8 @@ public class Httper {
 			inputStream = entity.getContent();
 			bitmap = BitmapFactory.decodeStream(inputStream);
 		} catch (ClientProtocolException e) {
-			Test.error("Httper.loadImage()", e.toString());
 			e.printStackTrace();
 		} catch (IOException e) {
-			Test.error("Httper.loadImage()", e.toString());
 			e.printStackTrace();
 		}
 		return bitmap;
@@ -72,7 +70,6 @@ public class Httper {
 	 * @return 请求的数据
 	 */
 	public static String get(String url) {
-		Test.info("Httper=", url);
 		String result = null;
 		try {
 			HttpParams httpParameters = new BasicHttpParams();
@@ -85,10 +82,8 @@ public class Httper {
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				result = EntityUtils.toString(response.getEntity(),"UTF-8");
 			}
-			Test.info("Httper2=", result);
 			return result;
 		} catch (Exception e) {
-			Test.error("Httper.get()", e.toString());
 			return null;
 		}
 		

@@ -34,18 +34,18 @@ import android.widget.TextView;
  */
 public class MainFragment extends Fragment {
 	
-    private ViewPager mPager;
-    private ArrayList<Fragment> fragmentsList;
-    private ImageView ivBottomLine;
-    private TextView tvTabShop, tvTabRule;
+    private ViewPager mPager;					//ViewPager对象
+    private ArrayList<Fragment> fragmentsList;	//存储的fragment
+    private ImageView ivBottomLine;				//可移动的指示线
+    private TextView tvTabShop, tvTabRule;		//标签栏文字
 
-    private int currIndex;
-    private int position_one;
+    private int currIndex;			//当前标签坐标
+    private int position_one;		//第1个标签头的左端水平坐标（0开始）
     private Resources resources;
 
     private View rootView;
-    private Fragment shopfragment;
-    private Fragment ruleFragment;
+    private Fragment shopfragment;	//餐馆fragment
+    private Fragment ruleFragment;	//规则fragment
     
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -125,6 +125,7 @@ public class MainFragment extends Fragment {
 
     public class MyOnPageChangeListener implements OnPageChangeListener {
 
+    	//切换标签页时的处理
         @Override
         public void onPageSelected(int arg0) {
             Animation animation = null;

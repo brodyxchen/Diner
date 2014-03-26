@@ -10,7 +10,7 @@
             android:id="@+id/dishTag"  
             android:layout_width="wrap_content"  
             android:layout_height="wrap_content"    
-            android:textColor="@color/font_color_normal"
+            android:textColor="@color/font_color_deep"
             android:textSize="22sp"/>  
   
             

@@ -41,6 +41,7 @@ public class ImageLoadTask extends AsyncTask<Object, Void, Bitmap> {
     @Override  
     protected void onPostExecute(Bitmap result) {  
         if (result == null) { 
+        	Document.MainDoc().imageCache.removeDownloading(address);
             return;  
         }  
         Document.MainDoc().imageCache.putImage(address, result);//∑≈»Îª∫¥Ê  

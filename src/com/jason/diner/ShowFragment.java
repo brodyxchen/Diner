@@ -42,7 +42,7 @@ import com.jason.Task.FragmentLoadTask;
  */
 public class ShowFragment extends Fragment implements IUpdate {
 
-	private ListView showList;
+	private ListView menuList;			//菜单列表
 	private View rootView;
 	private ProgressDialog progressbar;
 
@@ -55,9 +55,12 @@ public class ShowFragment extends Fragment implements IUpdate {
 			Document.MainDoc().server.clearParam();
 		} else {
 
+			//处理列表（每个列表项是ViewPager）
 			Iterator iter = Document.MainDoc().order.dishes.entrySet()
 					.iterator();
 			while (iter.hasNext()) {
+				
+				//得到每组中的数据（分组为：荤、素、汤）
 				Map.Entry<String, ArrayList<ArrayList<DishInfo>>> entry = (Map.Entry<String, ArrayList<ArrayList<DishInfo>>>) iter
 						.next();
 
@@ -65,7 +68,7 @@ public class ShowFragment extends Fragment implements IUpdate {
 				ArrayList<ArrayList<DishInfo>> value = entry.getValue();
 				Document.MainDoc().order.categoryCount.put(key, value.size());
 
-				// tag
+				//分组头
 				ArrayList<DishInfo> dishTags = new ArrayList<DishInfo>();
 				DishInfo dishTag = new DishInfo();
 				dishTag.dishId = "" + -1;
@@ -73,7 +76,7 @@ public class ShowFragment extends Fragment implements IUpdate {
 				dishTags.add(dishTag);
 				Document.MainDoc().order.dishesBlinding.add(dishTags);
 
-				// context
+				//分组内容
 				for (int i = 0; i < value.size(); i++) {
 					Document.MainDoc().order.dishesBlinding.add(value.get(i));
 				}
@@ -90,7 +93,7 @@ public class ShowFragment extends Fragment implements IUpdate {
 		// TODO Auto-generated method stub
 		MyShowAdapter adapter = new MyShowAdapter(
 				Document.MainDoc().mainActivity, Document.MainDoc().order);
-		showList.setAdapter(adapter);
+		menuList.setAdapter(adapter);
 	}
 
 	@Override
@@ -99,8 +102,11 @@ public class ShowFragment extends Fragment implements IUpdate {
 		param = "rule=" + URLEncoder.encode(param);
 		String oldParam = Document.MainDoc().server.paramOrder;
 		if (oldParam != null && oldParam.trim().equals(param)) {
+			//若不是第一次请求，并且参数一样，直接更新UI，不从服务器请求数据
 			updateUI();
 		} else {
+			
+			//否则从服务器请求数据
 			Document.MainDoc().server.paramOrder = param;
 			FragmentLoadTask mTask = new FragmentLoadTask(this);
 			mTask.execute(Document.MainDoc().server.getOrderUrl(param));
@@ -114,21 +120,18 @@ public class ShowFragment extends Fragment implements IUpdate {
 			Bundle savedInstanceState) {
 
 		rootView = inflater.inflate(R.layout.show_fragment, container, false);
-		showList = (ListView) rootView.findViewById(R.id.showList);
-
+		menuList = (ListView) rootView.findViewById(R.id.showList);
 		if (Document.MainDoc().rule.shopId == null) {
 			return rootView;
 		}
-
 		updateHttp();
-
 		return rootView;
 	}
 
 }
 
 /**
- * 菜单列表适配器类
+ * 菜单列表适配器类（每一项是ViewPager）
  * 
  * @author Jason
  * 
@@ -148,51 +151,51 @@ class MyShowAdapter extends BaseAdapter {
 
 	}
 
-	// item的总行数
+	//item的总行数
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return data == null ? 0 : data.size();
 	}
 
-	// item对象
+	//item对象
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return data.get(position);
 
 	}
 
-	// item的id
+	//item的id
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	// 绘制每一个item
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
+		
 		ArrayList<DishInfo> item = (ArrayList<DishInfo>) getItem(position);
-
 		boolean isTag = false;
 		if (item.get(0).dishId.trim().equals("-1")) {
 			isTag = true;
 		}
 
+		//处理分组
 		TextView dishTag;
 		ViewPager dishPager;
 		if (isTag) {
+			//当前是分组
 			convertView = inflater.inflate(R.layout.show_fragment_item_tag,
 					null);
 			dishTag = (TextView) convertView.findViewById(R.id.dishTag);
 			dishTag.setText(item.get(0).dishCategory);
 		} else {
+			//当前是内容
 			convertView = inflater.inflate(R.layout.show_fragment_item, null);
 			dishPager = (ViewPager) convertView.findViewById(R.id.dishPager);
 
 			ArrayList<View> viewList = new ArrayList<View>();
+			//处理每一项（ViewPager）
 			for (int i = 0; i < item.size(); i++) {
 				View viewItem = inflater.inflate(
 						R.layout.show_fragment_item_viewpager, null);
@@ -225,9 +228,10 @@ class MyShowAdapter extends BaseAdapter {
 					dishMark.setText("备选");
 				}
 
+				
+				//异步加载图片
 				String address = item.get(i).dishImage;
 				Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
-
 				ImageView dishImage = (ImageView) viewItem
 						.findViewById(R.id.dishImage);
 				if (bitmap != null) {
@@ -248,6 +252,7 @@ class MyShowAdapter extends BaseAdapter {
 				viewList.add(viewItem);
 
 			}
+			//绑定ViewPager
 			dishPager.setAdapter(new MyItemPagerAdapter(viewList));
 			dishPager.setCurrentItem(0);
 		}
@@ -257,7 +262,7 @@ class MyShowAdapter extends BaseAdapter {
 }
 
 /**
- * 菜单列表项的ViewPager适配器类（备选菜单）
+ * 每一个列表项的ViewPager适配器类（使列表项可横向滑动：备选菜单）
  * 
  * @author Jason
  * 
@@ -276,13 +281,11 @@ class MyItemPagerAdapter extends PagerAdapter {
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		// TODO Auto-generated method stub
 		container.removeView(viewList.get(position));
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		// TODO Auto-generated method stub
 		container.addView(viewList.get(position));
 		return viewList.get(position);
 
@@ -295,7 +298,6 @@ class MyItemPagerAdapter extends PagerAdapter {
 
 	@Override
 	public boolean isViewFromObject(View arg0, Object arg1) {
-		// TODO Auto-generated method stub
 		return arg0 == arg1;
 	}
 

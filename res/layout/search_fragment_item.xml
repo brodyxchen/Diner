@@ -16,9 +16,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/shopImage"
-		android:layout_marginTop="20dp"
+		android:layout_marginTop="10dp"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textColor="?android:attr/textColorSecondary"   />   
+		android:textColor="@color/font_color_deep"   />   
     
 	<TextView android:id="@+id/shopAddress"
 	    android:layout_width="fill_parent"
@@ -26,7 +26,7 @@
 		android:layout_toRightOf="@id/shopImage"
 		android:layout_below="@id/shopName"
 		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:textColor="?android:attr/textColorTertiary"/>    
+		android:textColor="@color/font_gray_light"/>    
 	
 	<TextView android:id="@+id/shopIntroduce"
 	    android:layout_width="wrap_content"
@@ -34,6 +34,6 @@
 		android:layout_toRightOf="@id/shopImage"
 		android:layout_below="@id/shopAddress"
 		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:textColor="?android:attr/textColorSecondaryInverse"  />   
+		android:textColor="@color/font_gray_normal"  />   
         
 </RelativeLayout>

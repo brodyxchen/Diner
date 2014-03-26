@@ -26,7 +26,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +47,7 @@ import android.widget.TextView;
  */
 public class MainActivity extends FragmentActivity {
 
-	public FragmentManager fragmentManager;
+	public FragmentManager fragmentManager;		
 	public Resources resources;
 
 	// Drawer相关变量
@@ -59,33 +58,31 @@ public class MainActivity extends FragmentActivity {
 	private CharSequence mTitle;
 	private ArrayList<HashMap<String, Object>> mMenuTitles;
 
-	//
-	private Fragment fragment;
-	private SearchView searchView;
+	
+	private Fragment fragment;				//存储本类中用到的fragment
+	private SearchView searchView;			
 	private SearchManager searchManager;
 
-	//
-	private MenuItem searchItem;
-	private int lastSelectItemPosition;
+	
+	private MenuItem searchItem;			//ActionBar中的搜索按钮
+	private int lastSelectItemPosition;		//记录上一次选择的Drawer侧边菜单的位置
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		new Document(this);
-
 		fragmentManager = getSupportFragmentManager();
 		lastSelectItemPosition = -1;
 
 		setContentView(R.layout.main_activity);
-
 		getActionBar().setBackgroundDrawable(
 				this.getResources().getDrawable(R.color.background_color_deep));
-
 		resources = getResources();
 		mTitle = mDrawerTitle = getTitle();
 		mMenuTitles = new ArrayList<HashMap<String, Object>>();
 
+		//设置Drawer侧边菜单栏
 		HashMap<String, Object> map0 = new HashMap<String, Object>();
 		map0.put("menuImage", android.R.drawable.ic_menu_search);
 		map0.put("menuText", "搜索");
@@ -113,12 +110,14 @@ public class MainActivity extends FragmentActivity {
 				GravityCompat.START);
 
 		mDrawerList.setAdapter(new MyDrawerAdapter(this, mMenuTitles));
-
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
+		
+		//设置ActionBar中按钮
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
+		//设置Drawer在ActionBar中的状态（ActionBar最左边标志）
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close) {
@@ -138,26 +137,34 @@ public class MainActivity extends FragmentActivity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+		//设置默认的Drawer栏
 		if (savedInstanceState == null) {
 			selectItem(0);
 		}
 	}
 
+	/**
+	 * 收缩搜索栏
+	 */
 	public void closeSearchAction() {
 		searchItem.collapseActionView();
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 
+		//设置ActionBar搜索按钮
 		searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		searchItem = menu.findItem(R.id.action_search);
 		searchView = (SearchView) menu.findItem(R.id.action_search)
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getComponentName()));
+		
+		//当用户点击键盘上搜索按钮时的监听器
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 			@Override
@@ -168,16 +175,19 @@ public class MainActivity extends FragmentActivity {
 				if (currentFragment == null
 						|| !currentFragment.getTag()
 								.equals(FRAGMENT_TAG.SEARCH)) {
+					//若第一次使用||当前fragment不是searchFragment，则切换到searchFragment
+					
 					fragment = new SearchFragment();
 					Document.MainDoc().currentFragment = fragment;
 					FragmentTransaction fragmentTransaction = fragmentManager
 							.beginTransaction();
 					fragmentTransaction.replace(R.id.content_frame, fragment,
 							FRAGMENT_TAG.SEARCH.toString());
-					fragmentTransaction.addToBackStack(null);
+//					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
 					searchView.clearFocus();
 				} else {
+					//否则，直接更新当前searchFragment内容
 					SearchFragment searchFragment = (SearchFragment) currentFragment;
 					searchFragment.updateHttp();
 				}
@@ -207,9 +217,10 @@ public class MainActivity extends FragmentActivity {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-
+		
 		switch (item.getItemId()) {
 		case R.id.action_search:
+			//若点击了ActionBar上搜索按钮，则展开搜索框
 			item.collapseActionView();
 			return true;
 		case android.R.id.home:
@@ -219,6 +230,11 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	/**
+	 * Drawer项的点击监听器类
+	 * @author Jason
+	 *
+	 */
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 		@Override
@@ -228,14 +244,20 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	/**
+	 * 设置给定的项处于给定状态
+	 * @param position	位置
+	 * @param checked	状态
+	 */
 	public void setChecked(int position, boolean checked) {
-		Test.info("SelectItem pos=", "" + position);
 		mDrawerList.setItemChecked(position, checked);
 	}
 
+	/**
+	 * Drawer项被点击时的处理方法
+	 * @param position
+	 */
 	public void selectItem(int position) {
-
-
 		if (lastSelectItemPosition == position) {
 			setChecked(position, true);
 			setTitle((String) (mMenuTitles.get(position).get("menuText")));
@@ -244,6 +266,7 @@ public class MainActivity extends FragmentActivity {
 			return;
 		}
 
+		//切换到对应的fragment界面
 		FRAGMENT_TAG tag = FRAGMENT_TAG.GUIDE;
 		switch (position) {
 		case 0:
@@ -272,14 +295,16 @@ public class MainActivity extends FragmentActivity {
 		args.putInt("MENU_ID", position);
 		fragment.setArguments(args);
 
+		//切换fragment
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 		fragmentTransaction.replace(R.id.content_frame, fragment,
 				tag.toString());
 		Document.MainDoc().currentFragment = fragment;
-		fragmentTransaction.addToBackStack(null);
+//		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.commit();
 
+		//设置状态
 		setChecked(position, true);
 		setTitle((String) (mMenuTitles.get(position).get("menuText")));
 		mDrawerLayout.closeDrawer(mDrawerList);
@@ -304,6 +329,9 @@ public class MainActivity extends FragmentActivity {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	/**
+	 * 点击手机返回按钮时的退出提示框
+	 */
 	@Override
 	public void onBackPressed() {
 		new AlertDialog.Builder(this).setTitle("确认退出吗？")
@@ -314,7 +342,6 @@ public class MainActivity extends FragmentActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						// 点击“确认”后的操作
 						MainActivity.this.finish();
-
 					}
 				})
 				.setNegativeButton("返回", new DialogInterface.OnClickListener() {

@@ -12,10 +12,7 @@ package com.jason.diner;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BaseData {
-
-	
-}
+public class BaseData {}
 
 /**
  * fragment tag 枚举
@@ -283,7 +280,7 @@ class DishInfo{
 
 
 /**
- * 点菜条件信息类
+ * 点菜条件信息类（记录从服务器得到的所有规则）
  * @author Jason
  *
  */
@@ -302,7 +299,7 @@ class ConditionInfo{
 }
 
 /**
- * 点菜规则信息类
+ * 点菜规则信息类（用户选择的所有规则）
  * @author Jason
  *
  */

@@ -36,32 +36,9 @@ import android.graphics.RectF;
  */
 public class Helper {
 
-	private Helper() {
+	private Helper() {}
 
-	}
-
-	/**
-	 * ºÏ·¨URL¼ì²â
-	 * @param pInput url String
-	 * @return ¼ì²â½á¹û boolean
-	 */
-	public static boolean isUrl(String pInput) {
-		if (pInput == null) {
-			return false;
-		}
-		String regEx = "^(http|https|ftp)//://([a-zA-Z0-9//.//-]+(//:[a-zA-"
-				+ "Z0-9//.&%//$//-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{"
-				+ "2}|[1-9]{1}[0-9]{1}|[1-9])//.(25[0-5]|2[0-4][0-9]|[0-1]{1}"
-				+ "[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)//.(25[0-5]|2[0-4][0-9]|"
-				+ "[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)//.(25[0-5]|2[0-"
-				+ "4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0"
-				+ "-9//-]+//.)*[a-zA-Z0-9//-]+//.[a-zA-Z]{2,4})(//:[0-9]+)?(/"
-				+ "[^/][a-zA-Z0-9//.//,//?//'///////+&%//$//=~_//-@]*)*$";
-		Pattern p = Pattern.compile(regEx);
-		Matcher matcher = p.matcher(pInput);
-		return matcher.matches();
-	}
-
+	
 	/**
 	 * Í¼Æ¬×ª»»
 	 * @param drawable Í¼Æ¬
@@ -137,7 +114,6 @@ public class Helper {
 			return true;
 		} catch (Exception e) {
 			search.clear();
-			Test.error("Helper.json2Search()", e.toString());
 			return false;
 		}
 
@@ -154,7 +130,6 @@ public class Helper {
 			return false;
 
 		try {
-			Test.info("2shop", json);
 			shop.clear();
 			JSONObject jsonShopInfo = new JSONObject(json);
 			shop.shopId = jsonShopInfo.getString(ShopInfo.KEYS.SHOP_ID);
@@ -194,7 +169,6 @@ public class Helper {
 
 		} catch (Exception e) {
 			shop.clear();
-			Test.error("Helper.json2Shop()", e.toString());
 			return false;
 		}
 	}
@@ -255,7 +229,6 @@ public class Helper {
 
 		} catch (Exception e) {
 			order.clear();
-			Test.error("Helper.json2Order()", e.toString());
 			return false;
 		}
 
@@ -289,7 +262,6 @@ public class Helper {
 			return true;
 		} catch (Exception e) {
 			condition.clear();
-			Test.error("Helper.json2Condition()", e.toString());
 			return false;
 		}
 
@@ -338,7 +310,6 @@ public class Helper {
 			return jsonObject.toString();
 
 		} catch (Exception e) {
-			Test.error("Helper.rule2Json()", e.toString());
 			return null;
 		}
 
