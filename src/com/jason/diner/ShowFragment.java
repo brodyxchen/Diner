@@ -30,9 +30,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jason.Interface.INotifyImageCompleted;
 import com.jason.Interface.IUpdate;
-import com.jason.Task.ImageLoadTask;
 import com.jason.Task.FragmentLoadTask;
+import com.jason.Task.ImageLoadTask;
 
 /**
  * 菜单界面
@@ -136,7 +137,7 @@ public class ShowFragment extends Fragment implements IUpdate {
  * @author Jason
  * 
  */
-class MyShowAdapter extends BaseAdapter {
+class MyShowAdapter extends BaseAdapter implements INotifyImageCompleted{
 
 	// 要使用到的数据源
 	private ArrayList<ArrayList<DishInfo>> data;
@@ -151,6 +152,11 @@ class MyShowAdapter extends BaseAdapter {
 
 	}
 
+	@Override
+	public void notifyUpdateImage(){
+		this.notifyDataSetChanged();
+	}
+	
 	//item的总行数
 	@Override
 	public int getCount() {

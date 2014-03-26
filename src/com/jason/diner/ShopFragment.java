@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jason.Interface.INotifyImageCompleted;
 import com.jason.Interface.IUpdate;
 import com.jason.Task.FragmentLoadTask;
 import com.jason.Task.ImageLoadTask;
@@ -38,7 +39,7 @@ import com.jason.Task.ImageLoadTask;
  * @author Jason
  *
  */
-public class ShopFragment extends Fragment implements IUpdate{
+public class ShopFragment extends Fragment implements IUpdate, INotifyImageCompleted{
 
 	//餐馆详情页控件
 	private ImageView shopImage;
@@ -150,14 +151,25 @@ public class ShopFragment extends Fragment implements IUpdate{
 		shopAddress.setText(shop.shopAddress);
 		shopIntroduce.setText(shop.shopIntroduce);
 		
+
 		//异步加载图片
-		Bitmap bitmap = Document.MainDoc().imageCache.getImage(shop.shopImage);
-		if(bitmap == null){
+		String address = shop.shopImage;
+		Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
+		if (bitmap != null) {
+			shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
+		} else {
+			//先设置成默认图片
 			shopImage.setImageBitmap(
 					Helper.toRoundCorner(
 							Helper.Drawable2Bitmap(R.drawable.icon)));
-		}else{
-			shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
+			if(!Document.MainDoc().imageCache.getDownloading(address)){
+				//若之前没有请求下载，现在就请求下载图片
+				ImageLoadTask imageLoadTask = new ImageLoadTask();
+				String url = Document.MainDoc().server.url;
+				imageLoadTask.execute(url, address, this);// 执行异步任务
+				Document.MainDoc().imageCache.putDownloading(address);
+			}
+			
 		}
 
 		//执行网络连接请求
@@ -166,7 +178,13 @@ public class ShopFragment extends Fragment implements IUpdate{
 		return rootView;
 	}
 
-	
+	public void notifyUpdateImage(){
+		String address = shop.shopImage;
+		Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
+		if (bitmap != null) {
+			shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
+		}
+	}
 
 	
 }
@@ -176,7 +194,7 @@ public class ShopFragment extends Fragment implements IUpdate{
  * @author Jason
  *
  */
-class MyShopAdapter extends BaseAdapter {
+class MyShopAdapter extends BaseAdapter implements INotifyImageCompleted{
 
 	//要使用到的数据源
 	private ArrayList<HashMap<String, Object>> data = null;
@@ -191,6 +209,11 @@ class MyShopAdapter extends BaseAdapter {
 
 	}
 
+	@Override
+	public void notifyUpdateImage(){
+		this.notifyDataSetChanged();
+	}
+	
 	//item的总行数
 	@Override
 	public int getCount() {

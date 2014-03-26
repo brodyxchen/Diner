@@ -11,8 +11,8 @@ package com.jason.Task;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.widget.BaseAdapter;
 
+import com.jason.Interface.INotifyImageCompleted;
 import com.jason.Network.Httper;
 import com.jason.diner.Document;
 
@@ -27,13 +27,14 @@ public class ImageLoadTask extends AsyncTask<Object, Void, Bitmap> {
     private String address;
     
     /**   ≈‰∆˜ */
-    private BaseAdapter adapter;
+    private INotifyImageCompleted notify;
     
     @Override  
     protected Bitmap doInBackground(Object... params) {  
         String url = (String) params[0];
         address = (String) params[1];
-        adapter = (BaseAdapter) params[2];
+        notify = (INotifyImageCompleted) params[2];
+
         Bitmap drawable = Httper.loadImage(url + address);//ªÒ»°Õ¯¬ÁÕº∆¨  
         return drawable;  
     }  
@@ -45,7 +46,8 @@ public class ImageLoadTask extends AsyncTask<Object, Void, Bitmap> {
             return;  
         }  
         Document.MainDoc().imageCache.putImage(address, result);//∑≈»Îª∫¥Ê  
-        adapter.notifyDataSetChanged();
+        notify.notifyUpdateImage();
+        //adapter.notifyDataSetChanged();
     }
 
 	@Override

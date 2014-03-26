@@ -11,6 +11,7 @@ package com.jason.diner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,16 +26,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jason.Interface.INotifyImageCompleted;
 import com.jason.Interface.IUpdate;
-import com.jason.Task.ImageLoadTask;
 import com.jason.Task.FragmentLoadTask;
+import com.jason.Task.ImageLoadTask;
 
 /**
  * 搜索界面
  * @author Jason
  *
  */
-public class SearchFragment extends Fragment implements IUpdate {
+public class SearchFragment extends Fragment implements IUpdate{
 
 	private ListView searchList;			//搜索结果的listView
 	private MySearchAdapter searchAdapter;	//搜索的适配器
@@ -127,6 +130,8 @@ public class SearchFragment extends Fragment implements IUpdate {
 		
 		return rootView;
 	}
+	
+
 }
 
 /**
@@ -134,7 +139,7 @@ public class SearchFragment extends Fragment implements IUpdate {
  * @author Jason
  *
  */
-class MySearchAdapter extends BaseAdapter {
+class MySearchAdapter extends BaseAdapter implements INotifyImageCompleted {
 
 	//要使用到的数据源
 	private ArrayList<HashMap<String, Object>> data = null;
@@ -150,6 +155,11 @@ class MySearchAdapter extends BaseAdapter {
 
 	}
 
+	@Override
+	public void notifyUpdateImage(){
+		this.notifyDataSetChanged();
+	}
+	
 	//item的总行数
 	@Override
 	public int getCount() {
@@ -213,9 +223,12 @@ class MySearchAdapter extends BaseAdapter {
 		} else {// 缓存没有就设置为默认图片，并且从网络异步下载
 			holder.shopImage.setImageBitmap(Helper.toRoundCorner(Helper
 					.Drawable2Bitmap(R.drawable.icon)));
-			ImageLoadTask imageLoadTask = new ImageLoadTask();
-			String url = Document.MainDoc().server.url;
-			imageLoadTask.execute(url, address, this);// 执行异步任务
+			if(!Document.MainDoc().imageCache.getDownloading(address)){
+				ImageLoadTask imageLoadTask = new ImageLoadTask();
+				String url = Document.MainDoc().server.url;
+				imageLoadTask.execute(url, address, this);// 执行异步任务
+				Document.MainDoc().imageCache.putDownloading(address);
+			}
 		}
 
 		return convertView;
