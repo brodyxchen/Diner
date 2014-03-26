@@ -1,5 +1,15 @@
+/*
+ * ShowFragment
+ *
+ * Version 1.0
+ *
+ * 2014-03-25
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,15 +30,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jason.Interface.UIInterface;
+import com.jason.Interface.IUpdate;
 import com.jason.Task.ImageLoadTask;
 import com.jason.Task.MyAsyncTask;
 
-public class ShowFragment extends Fragment implements UIInterface {
+/**
+ * 菜单界面
+ * @author Jason
+ *
+ */
+public class ShowFragment extends Fragment implements IUpdate {
 
 	private ListView showList;
 	private View rootView;
-	private ArrayList<Integer> indexList;
 	private ProgressDialog progressbar;
 
 	@Override
@@ -36,18 +50,20 @@ public class ShowFragment extends Fragment implements UIInterface {
 		// TODO Auto-generated method stub
 		if (!Helper.json2Order(json, Document.MainDoc().order)) {
 			Toast.makeText(Document.MainDoc().mainActivity,
-					"请求数据异常，请重试！", Toast.LENGTH_SHORT).show();
+					"网络连接异常，请检查网络并重试", Toast.LENGTH_SHORT).show();
+			Document.MainDoc().server.clearParam();
 		} else {
 
 			Iterator iter = Document.MainDoc().order.dishes.entrySet()
 					.iterator();
 			while (iter.hasNext()) {
-				Map.Entry<String, ArrayList<ArrayList<DishInfo>>> entry = (Map.Entry<String, ArrayList<ArrayList<DishInfo>>>) iter
-						.next();
+				Map.Entry<String, ArrayList<ArrayList<DishInfo>>> entry = 
+						(Map.Entry<String, ArrayList<ArrayList<DishInfo>>>) 
+						iter.next();
 
 				String key = entry.getKey();
 				ArrayList<ArrayList<DishInfo>> value = entry.getValue();
-				Document.MainDoc().order.categorySize.put(key, value.size());
+				Document.MainDoc().order.categoryCount.put(key, value.size());
 
 				// tag
 				ArrayList<DishInfo> dishTags = new ArrayList<DishInfo>();
@@ -76,10 +92,26 @@ public class ShowFragment extends Fragment implements UIInterface {
 				Document.MainDoc().mainActivity,
 				Document.MainDoc().order);
 		showList.setAdapter(adapter);
-		Document.MainDoc().mainActivity.mDrawerList.setItemChecked(1, true);
-
+		Document.MainDoc().mainActivity.setChecked(1,true);
 	}
 
+	@Override
+	public void updateHttp(){
+		String param = Helper.rule2Json(Document.MainDoc().rule);
+		param = "rule=" + URLEncoder.encode(param);
+		String oldParam = Document.MainDoc().server.paramOrder;
+		if(oldParam != null && oldParam.trim().equals(param)){
+			updateUI();
+		}else{
+			Document.MainDoc().server.paramOrder = param;
+			MyAsyncTask mTask = new MyAsyncTask(this);
+			mTask.execute(Document.MainDoc().server.getOrderUrl(param));
+			progressbar = ProgressDialog.show(
+					Document.MainDoc().mainActivity,
+					"Loading...", "Please wait...", true, false);
+		}
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -91,24 +123,19 @@ public class ShowFragment extends Fragment implements UIInterface {
 			return rootView;
 		}
 		
-		String param = "rule=" + Helper.rule2Json(Document.MainDoc().rule);
-		String oldParam = Document.MainDoc().server.paramOrder;
-		if(oldParam != null && oldParam.trim().equals(param)){
-			updateUI();
-		}else{
-			Document.MainDoc().server.paramOrder = param;
-			MyAsyncTask mTask = new MyAsyncTask(this);
-			mTask.execute(Document.MainDoc().server.getOrderUrl(null));
-			progressbar = ProgressDialog.show(Document.MainDoc().mainActivity, "Loading...", "Please wait...", true, false);
-		}
+		updateHttp();
 
-		
 		
 		return rootView;
 	}
 
 }
 
+/**
+ * 菜单列表适配器类
+ * @author Jason
+ *
+ */
 class MyShowAdapter extends BaseAdapter {
 
 	// 要使用到的数据源
@@ -170,13 +197,15 @@ class MyShowAdapter extends BaseAdapter {
 
 			ArrayList<View> viewList = new ArrayList<View>();
 			for (int i = 0; i < item.size(); i++) {
-				View viewItem = inflater.inflate(R.layout.show_viewpager_item,
-						null);
+				View viewItem = inflater.inflate(
+						R.layout.show_fragment_item_viewpager,null);
 
 				if (i % 2 == 0) {
-					viewItem.setBackgroundResource(R.color.background_color_light);
+					viewItem.setBackgroundResource(
+							R.color.background_color_light);
 				} else {
-					viewItem.setBackgroundResource(R.color.background_gray_normal);
+					viewItem.setBackgroundResource(
+							R.color.background_gray_normal);
 				}
 
 				TextView dishName = (TextView) viewItem
@@ -233,6 +262,11 @@ class MyShowAdapter extends BaseAdapter {
 
 }
 
+/**
+ * 菜单列表项的ViewPager适配器类（备选菜单）
+ * @author Jason
+ *
+ */
 class MyItemPagerAdapter extends PagerAdapter {
 	private ArrayList<View> viewList;
 

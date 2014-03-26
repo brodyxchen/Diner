@@ -1,17 +1,33 @@
+/*
+ * ImageLoadTask
+ *
+ * Version 1.0
+ *
+ * 2014-03-25
+ *
+ * Copyright notice
+ */
 package com.jason.Task;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.BaseAdapter;
 
 import com.jason.Network.Httper;
 import com.jason.diner.Document;
-import com.jason.diner.Test;
 
+/**
+ * 图片后台加载类
+ * @author Jason
+ *
+ */
 public class ImageLoadTask extends AsyncTask<Object, Void, Bitmap> {   
-    String address;
-    BaseAdapter adapter;
+	
+	/** 地址 */
+    private String address;
+    
+    /** 适配器 */
+    private BaseAdapter adapter;
     
     @Override  
     protected Bitmap doInBackground(Object... params) {  

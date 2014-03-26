@@ -1,3 +1,12 @@
+/*
+ * Helper
+ *
+ * Version 1.0
+ *
+ * 2014-03-25
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
 import java.util.ArrayList;
@@ -19,14 +28,23 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
+/**
+ * 辅助类（Json转换，图片转换，圆角图片处理，合法URL检测等）
+ * @author Jason
+ *
+ */
 public class Helper {
 
 	private Helper() {
 
 	}
 
+	/**
+	 * 合法URL检测
+	 * @param pInput url String
+	 * @return 检测结果 boolean
+	 */
 	public static boolean isUrl(String pInput) {
 		if (pInput == null) {
 			return false;
@@ -44,6 +62,11 @@ public class Helper {
 		return matcher.matches();
 	}
 
+	/**
+	 * 图片转换
+	 * @param drawable 图片
+	 * @return 图片资源
+	 */
 	public static Bitmap Drawable2Bitmap(int drawable) {
 		Bitmap bmp = BitmapFactory.decodeResource(
 				Document.MainDoc().mainActivity.resources, drawable);
@@ -51,6 +74,11 @@ public class Helper {
 		return bmp;
 	}
 
+	/**
+	 * 圆角图片处理
+	 * @param bitmap 原始图片
+	 * @return 圆角图片
+	 */
 	public static Bitmap toRoundCorner(Bitmap bitmap) {
 		int pixels = 70;
 		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
@@ -73,6 +101,12 @@ public class Helper {
 		return output;
 	}
 
+	/**
+	 * Jason转SearchInfo
+	 * @param json jason字符串
+	 * @param search searchInfo对象
+	 * @return	是否成功
+	 */
 	public static boolean json2Search(String json, SearchInfo search) {
 		if (json == null)
 			return false;
@@ -84,12 +118,12 @@ public class Helper {
 			for (int i = 0; i < arr.length(); i++) {
 				JSONObject temp = (JSONObject) arr.get(i);
 
-				String shopId = temp.getString(ShopInfoKey.shopId);
-				String shopImage = temp.getString(ShopInfoKey.shopImage);
-				String shopName = temp.getString(ShopInfoKey.shopName);
-				String shopAddress = temp.getString(ShopInfoKey.shopAddress);
+				String shopId = temp.getString(ShopInfo.KEYS.SHOP_ID);
+				String shopImage = temp.getString(ShopInfo.KEYS.SHOP_IMAGE);
+				String shopName = temp.getString(ShopInfo.KEYS.SHOP_NAME);
+				String shopAddress = temp.getString(ShopInfo.KEYS.SHOP_ADDRESS);
 				String shopIntroduce = temp
-						.getString(ShopInfoKey.shopIntroduce);
+						.getString(ShopInfo.KEYS.SHOP_INTRODUCE);
 
 				ShopInfo shopInfo = new ShopInfo();
 				shopInfo.shopId = shopId;
@@ -109,36 +143,50 @@ public class Helper {
 
 	}
 
+	/**
+	 * Jason转ShopInfo
+	 * @param json jason字符串
+	 * @param shop ShopInfo对象
+	 * @return	是否成功
+	 */
 	public static boolean json2Shop(String json, ShopInfo shop) {
 		if (json == null)
 			return false;
 
 		try {
+			Test.info("2shop", json);
 			shop.clear();
 			JSONObject jsonShopInfo = new JSONObject(json);
-			shop.shopId = jsonShopInfo.getString(ShopInfoKey.shopId);
-			shop.shopImage = jsonShopInfo.getString(ShopInfoKey.shopImage);
-			shop.shopName = jsonShopInfo.getString(ShopInfoKey.shopName);
-			shop.shopAddress = jsonShopInfo.getString(ShopInfoKey.shopAddress);
+			shop.shopId = jsonShopInfo.getString(ShopInfo.KEYS.SHOP_ID);
+			shop.shopImage = jsonShopInfo.getString(ShopInfo.KEYS.SHOP_IMAGE);
+			shop.shopName = jsonShopInfo.getString(ShopInfo.KEYS.SHOP_NAME);
+			shop.shopAddress = 
+					jsonShopInfo.getString(ShopInfo.KEYS.SHOP_ADDRESS);
 			shop.shopIntroduce = jsonShopInfo
-					.getString(ShopInfoKey.shopIntroduce);
+					.getString(ShopInfo.KEYS.SHOP_INTRODUCE);
 
 			JSONArray jsonShopTopList = jsonShopInfo
-					.getJSONArray(ShopInfoKey.topList);
+					.getJSONArray(ShopInfo.KEYS.TOP_LIST);
 
 			
 			
 			for (int i = 0; i < jsonShopTopList.length(); i++) {
 				JSONObject jsonDish = (JSONObject) jsonShopTopList.get(i);
 				DishInfo dishInfo = new DishInfo();
-				dishInfo.dishId = jsonDish.getString(DishInfoKey.dishId);
-				dishInfo.dishImage = jsonDish.getString(DishInfoKey.dishImage);
-				dishInfo.dishName = jsonDish.getString(DishInfoKey.dishName);
-				dishInfo.dishTaste = jsonDish.getString(DishInfoKey.dishTaste);
-				dishInfo.dishFood = jsonDish.getString(DishInfoKey.dishFood);
-				dishInfo.dishCooking = jsonDish.getString(DishInfoKey.dishCooking);
-				dishInfo.dishCategory = jsonDish
-						.getString(DishInfoKey.dishCategory);
+				dishInfo.dishId = 
+						jsonDish.getString(DishInfo.KEYS.DISH_ID);
+				dishInfo.dishImage = 
+						jsonDish.getString(DishInfo.KEYS.DISH_IMAGE);
+				dishInfo.dishName = 
+						jsonDish.getString(DishInfo.KEYS.DISH_NAME);
+				dishInfo.dishTaste = 
+						jsonDish.getString(DishInfo.KEYS.DISH_TASTE);
+				dishInfo.dishFood = 
+						jsonDish.getString(DishInfo.KEYS.DISH_FOOD);
+				dishInfo.dishCooking = 
+						jsonDish.getString(DishInfo.KEYS.DISH_COOKING);
+				dishInfo.dishCategory = 
+						jsonDish.getString(DishInfo.KEYS.DISH_CATEGORY);
 				shop.topList.add(dishInfo);
 			}
 
@@ -151,6 +199,12 @@ public class Helper {
 		}
 	}
 
+	/**
+	 * Jason转OrderInfo
+	 * @param json jason字符串
+	 * @param order OrderInfo对象
+	 * @return	是否成功
+	 */
 	public static boolean json2Order(String json, OrderInfo order) {
 		if (json == null)
 			return false;
@@ -166,7 +220,8 @@ public class Helper {
 				key = iterator.next();
 				value = (JSONArray) jsonDishes.get(key);
 				
-				ArrayList<ArrayList<DishInfo>> categoryes = new ArrayList<ArrayList<DishInfo>>();
+				ArrayList<ArrayList<DishInfo>> categoryes = 
+						new ArrayList<ArrayList<DishInfo>>();
 				for(int i = 0; i < value.length(); i++){
 					JSONArray jsonCandidate = value.getJSONArray(i);
 					ArrayList<DishInfo> candidate = new ArrayList<DishInfo>();
@@ -174,13 +229,20 @@ public class Helper {
 						JSONObject jsonDish = jsonCandidate.getJSONObject(j);
 						
 						DishInfo dish = new DishInfo();
-						dish.dishId = jsonDish.getString(DishInfoKey.dishId);
-						dish.dishImage = jsonDish.getString(DishInfoKey.dishImage);
-						dish.dishName = jsonDish.getString(DishInfoKey.dishName);
-						dish.dishFood = jsonDish.getString(DishInfoKey.dishFood);
-						dish.dishTaste = jsonDish.getString(DishInfoKey.dishTaste);
-						dish.dishCooking = jsonDish.getString(DishInfoKey.dishCooking);
-						dish.dishCategory = jsonDish.getString(DishInfoKey.dishCategory);
+						dish.dishId = 
+								jsonDish.getString(DishInfo.KEYS.DISH_ID);
+						dish.dishImage = 
+								jsonDish.getString(DishInfo.KEYS.DISH_IMAGE);
+						dish.dishName = 
+								jsonDish.getString(DishInfo.KEYS.DISH_NAME);
+						dish.dishFood = 
+								jsonDish.getString(DishInfo.KEYS.DISH_FOOD);
+						dish.dishTaste = 
+								jsonDish.getString(DishInfo.KEYS.DISH_TASTE);
+						dish.dishCooking = 
+								jsonDish.getString(DishInfo.KEYS.DISH_COOKING);
+						dish.dishCategory = 
+								jsonDish.getString(DishInfo.KEYS.DISH_CATEGORY);
 						candidate.add(dish);
 					}
 					categoryes.add(candidate);
@@ -199,6 +261,12 @@ public class Helper {
 
 	}
 
+	/**
+	 * Jason转ConditionInfo
+	 * @param json jason字符串
+	 * @param condition ConditionInfo对象
+	 * @return	是否成功
+	 */
 	public static boolean json2Condition(String json, ConditionInfo condition) {
 		if (json == null)
 			return false;
@@ -227,6 +295,11 @@ public class Helper {
 
 	}
 
+	/**
+	 * RuleInfo转Jason
+	 * @param rule RuleInfo对象
+	 * @return jason
+	 */
 	public static String rule2Json(RuleInfo rule) {
 		if(rule == null)
 			return null;
@@ -234,24 +307,24 @@ public class Helper {
 		try {
 			JSONObject jsonObject = new JSONObject();
 
-			jsonObject.put(RuleInfoKey.shopId, rule.shopId);
+			jsonObject.put(RuleInfo.KEYS.SHOP_ID, rule.shopId);
 			JSONArray staredJsonArray = new JSONArray();
 			for (int i = 0; i < rule.staredDishList.size(); i++) {
 				staredJsonArray.put(rule.staredDishList.get(i));
 			}
-			jsonObject.put(RuleInfoKey.staredDishList, staredJsonArray);
+			jsonObject.put(RuleInfo.KEYS.STARED_DISH_LIST, staredJsonArray);
 
 			JSONArray categoryJsonArray = new JSONArray();
 			for (int i = 0; i < rule.categoryList.size(); i++) {
 				categoryJsonArray.put(rule.categoryList.get(i));
 			}
-			jsonObject.put(RuleInfoKey.categoryList, categoryJsonArray);
+			jsonObject.put(RuleInfo.KEYS.CATEGORY_LIST, categoryJsonArray);
 
 			JSONObject conditionObject = new JSONObject();
 			Iterator iter = rule.conditionList.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry<String, ArrayList<Boolean>> entry = (Map.Entry<String, ArrayList<Boolean>>) iter
-						.next();
+				Map.Entry<String, ArrayList<Boolean>> entry = 
+						(Map.Entry<String, ArrayList<Boolean>>) iter.next();
 				JSONArray conditionArray = new JSONArray();
 				String key = entry.getKey();
 				ArrayList<Boolean> value = entry.getValue();
@@ -260,7 +333,7 @@ public class Helper {
 				}
 				conditionObject.put(key, conditionArray);
 			}
-			jsonObject.put(RuleInfoKey.conditionList, conditionObject);
+			jsonObject.put(RuleInfo.KEYS.CONDITION_LIST, conditionObject);
 
 			return jsonObject.toString();
 

@@ -1,3 +1,12 @@
+/*
+ * SplashActivity
+ *
+ * Version 1.0
+ *
+ * 2014-03-25
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
 import android.app.Activity;
@@ -6,6 +15,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
+/**
+ * 欢迎界面（第一次使用时）
+ * @author Jason
+ *
+ */
 public class SplashActivity extends Activity {
 
 	private final int SPLASH_DISPLAY_LENGHT = 1500; // 延迟六秒
@@ -13,8 +27,6 @@ public class SplashActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		// getActionBar().hide();
 
 		setContentView(R.layout.splash_activity);
 		SharedPreferences preferences = getSharedPreferences("app_conf",

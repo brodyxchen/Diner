@@ -1,3 +1,12 @@
+/*
+ * Classname
+ *
+ * Version information
+ *
+ * Date
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
 import java.util.ArrayList;
@@ -55,7 +64,7 @@ public class NavActivity extends Activity {
 		final ArrayList<View> views = new ArrayList<View>();
 		final ArrayList<String> titles = new ArrayList<String>();
 		for (int i = 0; i < COUNT; i++) {
-			View view = mLi.inflate(R.layout.nav_welcome, null);
+			View view = mLi.inflate(R.layout.nav_activity_image, null);
 			LinearLayout lay = (LinearLayout) view
 					.findViewById(R.id.welcomeImg);
 			lay.setBackgroundResource(welcomImg[i]);
@@ -77,7 +86,8 @@ public class NavActivity extends Activity {
 			}
 
 			@Override
-			public void destroyItem(View container, int position, Object object) {
+			public void destroyItem(View container,
+					int position, Object object) {
 				((ViewPager) container).removeView(views.get(position));
 			}
 
@@ -93,9 +103,14 @@ public class NavActivity extends Activity {
 			}
 		};
 
-		mViewPager.setAdapter(mPagerAdapter);// 与ListView用法相同，设置重写的Adapter。这样就实现了ViewPager的滑动效果。
+		mViewPager.setAdapter(mPagerAdapter);
 	}
 
+	/**
+	 * 页面滑动监听器
+	 * @author Jason
+	 *
+	 */
 	public class MyOnPageChangeListener implements OnPageChangeListener {
 
 		public void onPageSelected(int arg0) {// 参数arg0为选中的View

@@ -10,7 +10,6 @@
     <color name="background_color_normal">#B3E5FF</color> <!-- 彩色  背景 -->
     <color name="background_color_deep">#81BAE7</color> <!-- 深彩色  背景-->
 
-
     <!-- 字体颜色 -->
     <color name="font_gray_light">#DDDDDD</color> <!-- 淡灰色 -->
     <color name="font_gray_normal">#808080</color> <!-- 灰色 -->

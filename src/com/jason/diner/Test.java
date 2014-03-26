@@ -1,3 +1,12 @@
+/*
+ * Classname
+ *
+ * Version information
+ *
+ * Date
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
 import android.util.Log;

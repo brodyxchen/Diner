@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+
+	<ImageView android:id="@+id/shopImage"
+		    android:layout_width="70dp"
+		    android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp" />
+		/>
+        
+    <TextView android:id="@+id/shopName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/shopImage"
+		android:layout_marginTop="20dp"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textColor="?android:attr/textColorSecondary"   />   
+    
+	<TextView android:id="@+id/shopAddress"
+	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/shopImage"
+		android:layout_below="@id/shopName"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textColor="?android:attr/textColorTertiary"/>    
+	
+	<TextView android:id="@+id/shopIntroduce"
+	    android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/shopImage"
+		android:layout_below="@id/shopAddress"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textColor="?android:attr/textColorSecondaryInverse"  />   
+        
+</RelativeLayout>

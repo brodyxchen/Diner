@@ -8,8 +8,7 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="search_hint">输入餐馆名称</string>
     <string name="tab_1">餐馆</string>
-    <string name="tab_2">规则</string>
-    <string name="tab_3">菜单</string>
+    <string name="tab_2">点菜</string>
     
     <string name="desc">desc</string>
     
@@ -41,7 +40,7 @@
     <string name="about_email">Email:</string>
     <string name="about_address">Address:</string>
     
-    <string name="about_team_context">重大机器学习团队</string>
+    <string name="about_team_context">重庆大学蛋炒麻花团队</string>
     <string name="about_tel_context">186XXXXXXXX</string>
     <string name="about_email_context">xxxxx@xxx.com</string>
     <string name="about_address_context">中国重庆市XXX区XX路XXX号</string>

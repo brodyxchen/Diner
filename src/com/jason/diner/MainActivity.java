@@ -1,3 +1,12 @@
+/*
+ * MainActivity
+ *
+ * Version 1.0
+ *
+ * 2014-03-25
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
 import java.util.ArrayList;
@@ -15,7 +24,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,33 +37,44 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+/**
+ * 应用的主Activity，处理整个应用的结构
+ * 
+ * @author Jason
+ *
+ */
 public class MainActivity extends FragmentActivity {
-	public DrawerLayout mDrawerLayout;
-	public ListView mDrawerList;
-	public ActionBarDrawerToggle mDrawerToggle;
-	public CharSequence mDrawerTitle;
-	public CharSequence mTitle;
-	public ArrayList<HashMap<String, Object>> mMenuTitles;
-
-	private int lastSelectItemPosition;
+	
 	public FragmentManager fragmentManager;
-	public SearchView searchView;
-	public MenuItem menuItem;
-	public SearchManager searchManager;
-	public Fragment fragment;
 	public Resources resources;
-	private MenuItem searchItem;
+	
+	//Drawer相关变量
+	private DrawerLayout mDrawerLayout;
+	private ListView mDrawerList;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private CharSequence mDrawerTitle;
+	private CharSequence mTitle;
+	private ArrayList<HashMap<String, Object>> mMenuTitles;
 
+	//
+	private Fragment fragment;
+	private SearchView searchView;
+	private SearchManager searchManager;
+
+	//
+	private MenuItem searchItem;
+	private int lastSelectItemPosition;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		new Document(this);
-
+		
 		fragmentManager = getSupportFragmentManager();
 		lastSelectItemPosition = -1;
 
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.main_activity);
 
 		getActionBar().setBackgroundDrawable(
 				this.getResources().getDrawable(R.color.background_color_deep));
@@ -92,42 +111,34 @@ public class MainActivity extends FragmentActivity {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-		// set a custom shadow that overlays the main content when the drawer
-		// opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
-		// set up the drawer's list view with items and click listener
-		// mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-		// R.layout.drawer_list_item, mMenuTitles));
-		//
+
 		mDrawerList.setAdapter(new MyDrawerAdapter(this, mMenuTitles));
 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		// enable ActionBar app icon to behave as action to toggle nav drawer
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		// ActionBarDrawerToggle ties together the the proper interactions
-		// between the sliding drawer and the action bar app icon
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description for accessibility */
-		R.string.drawer_close /* "close drawer" description for accessibility */
+		mDrawerToggle = new ActionBarDrawerToggle(this,
+		mDrawerLayout,
+		R.drawable.ic_drawer,
+		R.string.drawer_open,
+		R.string.drawer_close
 		) {
 			@Override
 			public void onDrawerClosed(View view) {
 				getActionBar().setTitle(mTitle);
-				invalidateOptionsMenu(); // creates call to
-											// onPrepareOptionsMenu()
+				invalidateOptionsMenu(); 
+											
 			}
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				getActionBar().setTitle(mDrawerTitle);
-				invalidateOptionsMenu(); // creates call to
-											// onPrepareOptionsMenu()
+				invalidateOptionsMenu(); 
+										
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -146,7 +157,8 @@ public class MainActivity extends FragmentActivity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 
-		searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		searchManager = 
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		searchItem = menu.findItem(R.id.action_search);
 		searchView = (SearchView) menu.findItem(R.id.action_search)
 				.getActionView();
@@ -156,17 +168,27 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				// 启动页面
 				Document.MainDoc().server.prompt = query;
-				
 				selectItem(0);
+				Fragment currentFragment = Document.MainDoc().currentFragment;
+				if(currentFragment == null 
+						|| !currentFragment.getTag().equals(
+								FRAGMENT_TAG.SEARCH))
+				{
+					fragment = new SearchFragment();
+					Document.MainDoc().currentFragment = fragment;
+					FragmentTransaction fragmentTransaction = fragmentManager
+							.beginTransaction();
+					fragmentTransaction.replace(R.id.content_frame, fragment,
+							FRAGMENT_TAG.SEARCH.toString());
+					fragmentTransaction.commit();
+					searchView.clearFocus();
+				}else{
+					SearchFragment searchFragment = 
+							(SearchFragment)currentFragment;
+					searchFragment.updateHttp();
+				}
 				
-				fragment = new SearchFragment();
-				FragmentTransaction fragmentTransaction = fragmentManager
-						.beginTransaction();
-				fragmentTransaction.replace(R.id.content_frame, fragment);
-				fragmentTransaction.commit();
-				searchView.clearFocus();
 
 				
 				return false;
@@ -182,11 +204,9 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
-	/* Called whenever we call invalidateOptionsMenu() */
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// If the nav drawer is open, hide action items related to the content
-		// view
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 		menu.findItem(R.id.action_search).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
@@ -194,12 +214,10 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// The action bar home/up action should open or close the drawer.
-		// ActionBarDrawerToggle will take care of this.
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		// Handle action buttons
+
 		switch (item.getItemId()) {
 		case R.id.action_search:
 			item.collapseActionView();
@@ -211,7 +229,6 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	/* The click listner for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 		@Override
@@ -221,47 +238,64 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	public void setChecked(int position, boolean checked){
+		mDrawerList.setItemChecked(position, checked);
+	}
+	
 	public void selectItem(int position) {
-		// update the main content by replacing fragments
+
+		Test.info("SelectItem pos=", ""+position);
 		if (lastSelectItemPosition == position) {
+			setChecked(position, true);
+			setTitle((String) (mMenuTitles.get(position).get("menuText")));
 			mDrawerLayout.closeDrawer(mDrawerList);
+			lastSelectItemPosition = position;
 			return;
 		}
 
+		FRAGMENT_TAG tag = FRAGMENT_TAG.GUIDE;
 		switch (position) {
 		case 0:
 			fragment = new GuideFragment();
+			tag = FRAGMENT_TAG.GUIDE;
 			break;
 		case 1:
-			fragment = new MainView();
+			fragment = new MainFragment();
+			tag = FRAGMENT_TAG.MAIN;
 			break;
 		case 2:
 			fragment = new ShowFragment();
+			tag = FRAGMENT_TAG.SHOW;
 			break;
 		case 3:
 			fragment = new SettingFragment();
+			tag = FRAGMENT_TAG.SETTING;
 			break;
 		case 4:
 			fragment = new AboutFragment();
+			tag = FRAGMENT_TAG.ABOUT;
 			break;
 		default:
 			fragment = new GuideFragment();
+			tag = FRAGMENT_TAG.GUIDE;
 			break;
 		}
 		Bundle args = new Bundle();
 		
 		args.putInt("MENU_ID", position);
 		fragment.setArguments(args);
-
+		
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
-		fragmentTransaction.replace(R.id.content_frame, fragment);
-		// fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		fragmentTransaction.replace(R.id.content_frame, fragment,
+				tag.toString());
+		Document.MainDoc().currentFragment = fragment;
+
 		fragmentTransaction.commit();
 		
 		
-		// update selected item and title, then close the drawer
-		mDrawerList.setItemChecked(position, true);
+
+		setChecked(position, true);
 		setTitle((String) (mMenuTitles.get(position).get("menuText")));
 		mDrawerLayout.closeDrawer(mDrawerList);
 		lastSelectItemPosition = position;
@@ -273,32 +307,30 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setTitle(mTitle);
 	}
 
-	/**
-	 * When using the ActionBarDrawerToggle, you must call it during
-	 * onPostCreate() and onConfigurationChanged()...
-	 */
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 }
 
+/**
+ * Drawer的适配器类
+ * @author Jason
+ *
+ */
 class MyDrawerAdapter extends BaseAdapter {
 
 	// 要使用到的数据源
-	private ArrayList<HashMap<String, Object>> data = null;// new
-															// ArrayList<HashMap<String,
+	private ArrayList<HashMap<String, Object>> data = null;
 
 	private LayoutInflater inflater;
 	private Context context;
@@ -329,16 +361,15 @@ class MyDrawerAdapter extends BaseAdapter {
 	// item的id
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
-	// 绘制每一个item
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		HashMap<String, Object> map = (HashMap<String, Object>) getItem(position);
-		convertView = inflater.inflate(R.layout.drawer_list_item, null);
+		HashMap<String, Object> map = 
+				(HashMap<String, Object>) getItem(position);
+		convertView = 
+				inflater.inflate(R.layout.main_activity_drawer_list_item, null);
 		ImageView menuImage = (ImageView) convertView
 				.findViewById(R.id.menuImage);
 		TextView menuText = (TextView) convertView.findViewById(R.id.menuText);

@@ -1,8 +1,16 @@
+/*
+ * SettingFragment
+ *
+ * Version 1.0
+ *
+ * 2014-03-25
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +22,13 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
+/**
+ * 设置界面
+ * @author Jason
+ *
+ */
 public class SettingFragment extends Fragment {
+	
 	private View rootView;
 	private RadioGroup radioGroup0;
 	private RadioButton radioButton0, radioButton2;
@@ -24,6 +38,7 @@ public class SettingFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
 		rootView = inflater
 				.inflate(R.layout.setting_fragment, container, false);
 
@@ -59,7 +74,8 @@ public class SettingFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				Intent mainIntent = new Intent(Document.MainDoc().mainActivity, NavActivity.class);
+				Intent mainIntent = new Intent(Document.MainDoc().mainActivity,
+								NavActivity.class);
 				Document.MainDoc().mainActivity.startActivity(mainIntent);
 			}
 		});
@@ -88,7 +104,8 @@ public class SettingFragment extends Fragment {
 					if (isUrl) {
 						Document.MainDoc().server.url = url;
 					} else {
-						Toast.makeText(Document.MainDoc().mainActivity, "无效的URL",
+						Toast.makeText(Document.MainDoc().mainActivity,
+								"无效的URL",
 								Toast.LENGTH_SHORT).show();
 					}
 				}

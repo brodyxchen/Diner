@@ -1,8 +1,16 @@
+/*
+ * ShopFragment
+ *
+ * Version 1.0
+ *
+ * 2014-03-25
+ *
+ * Copyright notice
+ */
 package com.jason.diner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,12 +25,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jason.Interface.UIInterface;
+import com.jason.Interface.IUpdate;
 import com.jason.Task.ImageLoadTask;
 import com.jason.Task.MyAsyncTask;
 
-public class ShopFragment extends Fragment implements UIInterface{
+/**
+ * 餐馆界面
+ * @author Jason
+ *
+ */
+public class ShopFragment extends Fragment implements IUpdate{
 
 	private ImageView shopImage;
 	private TextView shopName, shopAddress, shopIntroduce;
@@ -45,19 +57,21 @@ public class ShopFragment extends Fragment implements UIInterface{
 		// TODO Auto-generated method stub
 
 		if(!Helper.json2Shop(json, Document.MainDoc().shop)){
-			Toast.makeText(Document.MainDoc().mainActivity, "没有推荐菜",
+			Toast.makeText(Document.MainDoc().mainActivity,
+					"网络连接异常，请检查网络并重试",
 				     Toast.LENGTH_SHORT).show();
+			Document.MainDoc().server.clearParam();
 		}else{
 			for (DishInfo item : Document.MainDoc().shop.topList) {
 				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put(DishInfoKey.dishId, item.dishId);
-				map.put(DishInfoKey.dishImage, item.dishImage);
-				map.put(DishInfoKey.dishName, item.dishName);
-				map.put(DishInfoKey.dishTaste, item.dishTaste);
-				map.put(DishInfoKey.dishFood, item.dishFood);
-				map.put(DishInfoKey.dishCooking, item.dishCooking);
-				map.put(DishInfoKey.dishCategory, item.dishCategory);
-				map.put(DishInfoKey.selected, false);
+				map.put(DishInfo.KEYS.DISH_ID, item.dishId);
+				map.put(DishInfo.KEYS.DISH_IMAGE, item.dishImage);
+				map.put(DishInfo.KEYS.DISH_NAME, item.dishName);
+				map.put(DishInfo.KEYS.DISH_TASTE, item.dishTaste);
+				map.put(DishInfo.KEYS.DISH_FOOD, item.dishFood);
+				map.put(DishInfo.KEYS.DISH_COOKING, item.dishCooking);
+				map.put(DishInfo.KEYS.DISH_CATEGORY, item.dishCategory);
+				map.put(DishInfo.KEYS.SELECTED, false);
 				
 				Document.MainDoc().shop.topListBlinding.add(map);
 				Document.MainDoc().shop.selectedTopList.put(item.dishId, false);
@@ -76,8 +90,25 @@ public class ShopFragment extends Fragment implements UIInterface{
 		topAdapter = new MyShopAdapter(Document.MainDoc().mainActivity,
 				Document.MainDoc().shop.topListBlinding);
 		topList.setAdapter(topAdapter);
+		topList.smoothScrollToPosition(0);
 	}
 
+	@Override
+	public void updateHttp(){
+		String param = "shopId=" + Document.MainDoc().shop.shopId;
+		String oldParam = Document.MainDoc().server.paramShop;
+		if(oldParam != null && oldParam.trim().equals(param)){
+			updateUI();
+		}else{
+			Document.MainDoc().server.paramShop = param;
+			MyAsyncTask mTask = new MyAsyncTask(this);
+			mTask.execute(Document.MainDoc().server.getShopUrl(param));
+			progressbar = ProgressDialog.show(
+					Document.MainDoc().mainActivity,
+					"Loading..", "Please wait...", true, false);
+		}
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -97,22 +128,15 @@ public class ShopFragment extends Fragment implements UIInterface{
 		
 		Bitmap bitmap = Document.MainDoc().imageCache.getImage(shop.shopImage);
 		if(bitmap == null){
-			shopImage.setImageBitmap(Helper.toRoundCorner(Helper.Drawable2Bitmap(R.drawable.ic_launcher)));
+			shopImage.setImageBitmap(
+					Helper.toRoundCorner(
+							Helper.Drawable2Bitmap(R.drawable.ic_launcher)));
 		}else{
 			shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
 		}
 
-		String param = "shopId=" + Document.MainDoc().shop.shopId;
-		String oldParam = Document.MainDoc().server.paramShop;
-		if(oldParam != null && oldParam.trim().equals(param)){
-			updateUI();
-		}else{
-			Document.MainDoc().server.paramShop = param;
-			MyAsyncTask mTask = new MyAsyncTask(this);
-			mTask.execute(Document.MainDoc().server.getShopUrl(param));
-			progressbar = ProgressDialog.show(Document.MainDoc().mainActivity, "Loading..", "Please wait...", true, false);
-		}
 
+		updateHttp();
 		
 		
 		return rootView;
@@ -120,11 +144,15 @@ public class ShopFragment extends Fragment implements UIInterface{
 
 }
 
+/**
+ * 推荐菜列表适配器
+ * @author Jason
+ *
+ */
 class MyShopAdapter extends BaseAdapter {
 
 	// 要使用到的数据源
-	private ArrayList<HashMap<String, Object>> data = null;// new
-															// ArrayList<HashMap<String,
+	private ArrayList<HashMap<String, Object>> data = null;
 	private Context context;
 	private LayoutInflater inflater;
 
@@ -168,8 +196,10 @@ class MyShopAdapter extends BaseAdapter {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.shop_fragment_item, null);
 			holder = new ViewHolder();
-			holder.dishImage = (ImageView) convertView.findViewById(R.id.dishImage);
-			holder.dishName = (TextView) convertView.findViewById(R.id.dishName);
+			holder.dishImage = 
+					(ImageView) convertView.findViewById(R.id.dishImage);
+			holder.dishName = 
+					(TextView) convertView.findViewById(R.id.dishName);
 			holder.dishTaste = (TextView) convertView
 					.findViewById(R.id.dishTaste);
 			holder.dishFood = (TextView) convertView
@@ -178,22 +208,26 @@ class MyShopAdapter extends BaseAdapter {
 					.findViewById(R.id.dishCooking);
 			holder.dishCategory = (TextView) convertView
 					.findViewById(R.id.dishCategory);
-			holder.checkbox = (CheckBox) convertView.findViewById(R.id.dishSelect);
+			holder.checkbox = 
+					(CheckBox) convertView.findViewById(R.id.dishSelect);
 			
 			convertView.setTag(holder);
 		} else{
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
-		holder.dishName.setText((String) map.get(DishInfoKey.dishName));
-		holder.dishTaste.setText((String) map.get(DishInfoKey.dishTaste));
-		holder.dishFood.setText((String) map.get(DishInfoKey.dishFood));
-		holder.dishCooking.setText((String) map.get(DishInfoKey.dishCooking));
-		holder.dishCategory.setText((String) map.get(DishInfoKey.dishCategory));
+		holder.dishName.setText((String) map.get(DishInfo.KEYS.DISH_NAME));
+		holder.dishTaste.setText((String) map.get(DishInfo.KEYS.DISH_TASTE));
+		holder.dishFood.setText((String) map.get(DishInfo.KEYS.DISH_FOOD));
+		holder.dishCooking.setText(
+				(String) map.get(DishInfo.KEYS.DISH_COOKING));
+		holder.dishCategory.setText(
+				(String) map.get(DishInfo.KEYS.DISH_CATEGORY));
 		
-		String dishId = (String)map.get(DishInfoKey.dishId);
+		String dishId = (String)map.get(DishInfo.KEYS.DISH_ID);
 
-		holder.checkbox.setChecked(Document.MainDoc().shop.selectedTopList.get(dishId));
+		holder.checkbox.setChecked(
+				Document.MainDoc().shop.selectedTopList.get(dishId));
 		holder.checkbox.setTag(dishId);
 		holder.checkbox.setOnClickListener(new View.OnClickListener() {
 			
@@ -202,7 +236,8 @@ class MyShopAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				CheckBox cb = (CheckBox)arg0;
 				String dishId = (String)cb.getTag();
-				Document.MainDoc().shop.selectedTopList.put(dishId, cb.isChecked());
+				Document.MainDoc().shop.selectedTopList.put(dishId,
+						cb.isChecked());
 
 			}
 		});
@@ -210,12 +245,15 @@ class MyShopAdapter extends BaseAdapter {
 		
 		
 		try {
-			String address = (String) map.get(DishInfoKey.dishImage);
+			String address = (String) map.get(DishInfo.KEYS.DISH_IMAGE);
 			Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
 			if (bitmap != null) {
 				holder.dishImage.setImageBitmap( Helper.toRoundCorner(bitmap));
 			} else {
-				holder.dishImage.setImageBitmap(Helper.toRoundCorner(Helper.Drawable2Bitmap(R.drawable.ic_launcher)));
+				holder.dishImage.setImageBitmap(
+						Helper.toRoundCorner(
+								Helper.Drawable2Bitmap(
+										R.drawable.ic_launcher)));
 				ImageLoadTask imageLoadTask = new ImageLoadTask();
 				String url = Document.MainDoc().server.url;
 				imageLoadTask.execute(url, address, this);// 执行异步任务
