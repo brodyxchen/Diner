@@ -30,8 +30,8 @@
     <string name="about_email">Email:</string>
     <string name="about_address">Address:</string>
     
-    <string name="about_team_context">重庆大学蛋炒麻花团队</string>
+    <string name="about_team_context">重庆大学麻花炒蛋团队</string>
     <string name="about_tel_context">186XXXXXXXX</string>
-    <string name="about_email_context">xxxxx@xxx.com</string>
-    <string name="about_address_context">中国重庆市XXX区XX路XXX号</string>
+    <string name="about_email_context">zglcx123@163.com</string>
+    <string name="about_address_context">重庆市沙坪坝区沙正街174号</string>
 </resources>
