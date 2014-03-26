@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jason.Interface.IUpdate;
 import com.jason.Task.ImageLoadTask;
-import com.jason.Task.MyAsyncTask;
+import com.jason.Task.FragmentLoadTask;
 
 /**
  * 餐馆界面
@@ -101,7 +101,7 @@ public class ShopFragment extends Fragment implements IUpdate{
 			updateUI();
 		}else{
 			Document.MainDoc().server.paramShop = param;
-			MyAsyncTask mTask = new MyAsyncTask(this);
+			FragmentLoadTask mTask = new FragmentLoadTask(this);
 			mTask.execute(Document.MainDoc().server.getShopUrl(param));
 			progressbar = ProgressDialog.show(
 					Document.MainDoc().mainActivity,
@@ -130,7 +130,7 @@ public class ShopFragment extends Fragment implements IUpdate{
 		if(bitmap == null){
 			shopImage.setImageBitmap(
 					Helper.toRoundCorner(
-							Helper.Drawable2Bitmap(R.drawable.ic_launcher)));
+							Helper.Drawable2Bitmap(R.drawable.icon)));
 		}else{
 			shopImage.setImageBitmap( Helper.toRoundCorner(bitmap));
 		}
@@ -212,8 +212,11 @@ class MyShopAdapter extends BaseAdapter {
 					(CheckBox) convertView.findViewById(R.id.dishSelect);
 			
 			convertView.setTag(holder);
+
+			
 		} else{
 			holder = (ViewHolder)convertView.getTag();
+
 		}
 		
 		holder.dishName.setText((String) map.get(DishInfo.KEYS.DISH_NAME));
@@ -243,24 +246,24 @@ class MyShopAdapter extends BaseAdapter {
 		});
 		
 		
-		
-		try {
-			String address = (String) map.get(DishInfo.KEYS.DISH_IMAGE);
-			Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
-			if (bitmap != null) {
-				holder.dishImage.setImageBitmap( Helper.toRoundCorner(bitmap));
-			} else {
-				holder.dishImage.setImageBitmap(
-						Helper.toRoundCorner(
-								Helper.Drawable2Bitmap(
-										R.drawable.ic_launcher)));
+		String address = (String) map.get(DishInfo.KEYS.DISH_IMAGE);
+		Bitmap bitmap = Document.MainDoc().imageCache.getImage(address);// 从缓存中取图片
+		if (bitmap != null) {
+			holder.dishImage.setImageBitmap( Helper.toRoundCorner(bitmap));
+		} else {
+			holder.dishImage.setImageBitmap(
+					Helper.toRoundCorner(
+							Helper.Drawable2Bitmap(
+									R.drawable.default_dish)));
+			if(!Document.MainDoc().imageCache.getDownloading(address)){
 				ImageLoadTask imageLoadTask = new ImageLoadTask();
 				String url = Document.MainDoc().server.url;
 				imageLoadTask.execute(url, address, this);// 执行异步任务
+				Document.MainDoc().imageCache.putDownloading(address);
 			}
-		} catch (Exception e) {
-			Test.error("ShopFragment.MyShopAdapter.getView()", e.toString());
+			
 		}
+		
 
 		return convertView;
 

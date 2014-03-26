@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jason.Interface.IUpdate;
 import com.jason.Task.ImageLoadTask;
-import com.jason.Task.MyAsyncTask;
+import com.jason.Task.FragmentLoadTask;
 
 /**
  * 搜索界面
@@ -105,7 +105,7 @@ public class SearchFragment extends Fragment implements IUpdate {
 			updateUI();
 		}else{
 			Document.MainDoc().server.paramSearch = param;
-			MyAsyncTask mTask = new MyAsyncTask(this);
+			FragmentLoadTask mTask = new FragmentLoadTask(this);
 			mTask.execute(Document.MainDoc().server.getSearchUrl(param));
 			progressbar = ProgressDialog.show(
 					Document.MainDoc().mainActivity,
@@ -209,7 +209,7 @@ class MySearchAdapter extends BaseAdapter {
 				holder.shopImage.setImageBitmap(
 						Helper.toRoundCorner(
 								Helper.Drawable2Bitmap(
-										R.drawable.ic_launcher)));
+										R.drawable.icon)));
 				ImageLoadTask imageLoadTask = new ImageLoadTask();
 				String url = Document.MainDoc().server.url;
 				imageLoadTask.execute(url, address, this);// 执行异步任务

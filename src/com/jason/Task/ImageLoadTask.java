@@ -45,5 +45,13 @@ public class ImageLoadTask extends AsyncTask<Object, Void, Bitmap> {
         }  
         Document.MainDoc().imageCache.putImage(address, result);//∑≈»Îª∫¥Ê  
         adapter.notifyDataSetChanged();
-    }  
+    }
+
+	@Override
+	protected void onCancelled() {
+		// TODO Auto-generated method stub
+		super.onCancelled();
+	} 
+    
+    
 } 

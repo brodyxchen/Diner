@@ -22,16 +22,6 @@
     <string name="rules_produce_button">生成菜单</string>
     
     
-    <!-- Setting -->
-    <string name="Setting_Server_head">服务器</string>
-    <string name="Setting_Server_offline">离线</string>
-    <string name="Setting_Server_online">在线</string>
-    <string name="Setting_Server_defined">自定义</string>
-    <string name="Setting_Server_defined_hint">输入服务器地址</string>
-    <string name="Setting_Welcome_content">观赏欢迎界面</string>
-    
-    <string name="Setting_Cancel">默认</string>
-    <string name="Setting_Apply">应用</string>
     
     <!-- About -->
     <string name="about_head">About</string>

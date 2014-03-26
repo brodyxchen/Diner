@@ -12,8 +12,10 @@ package com.jason.diner;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,14 +44,14 @@ import android.widget.TextView;
  * 应用的主Activity，处理整个应用的结构
  * 
  * @author Jason
- *
+ * 
  */
 public class MainActivity extends FragmentActivity {
-	
+
 	public FragmentManager fragmentManager;
 	public Resources resources;
-	
-	//Drawer相关变量
+
+	// Drawer相关变量
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -64,13 +67,13 @@ public class MainActivity extends FragmentActivity {
 	//
 	private MenuItem searchItem;
 	private int lastSelectItemPosition;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		new Document(this);
-		
+
 		fragmentManager = getSupportFragmentManager();
 		lastSelectItemPosition = -1;
 
@@ -87,7 +90,7 @@ public class MainActivity extends FragmentActivity {
 		map0.put("menuImage", android.R.drawable.ic_menu_search);
 		map0.put("menuText", "搜索");
 		mMenuTitles.add(map0);
-		
+
 		HashMap<String, Object> map1 = new HashMap<String, Object>();
 		map1.put("menuImage", android.R.drawable.ic_menu_agenda);
 		map1.put("menuText", "主页");
@@ -99,14 +102,9 @@ public class MainActivity extends FragmentActivity {
 		mMenuTitles.add(map2);
 
 		HashMap<String, Object> map3 = new HashMap<String, Object>();
-		map3.put("menuImage", android.R.drawable.ic_menu_manage);
-		map3.put("menuText", "设置");
+		map3.put("menuImage", android.R.drawable.ic_menu_info_details);
+		map3.put("menuText", "关于");
 		mMenuTitles.add(map3);
-
-		HashMap<String, Object> map4 = new HashMap<String, Object>();
-		map4.put("menuImage", android.R.drawable.ic_menu_info_details);
-		map4.put("menuText", "关于");
-		mMenuTitles.add(map4);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -121,24 +119,21 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		mDrawerToggle = new ActionBarDrawerToggle(this,
-		mDrawerLayout,
-		R.drawable.ic_drawer,
-		R.string.drawer_open,
-		R.string.drawer_close
-		) {
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close) {
 			@Override
 			public void onDrawerClosed(View view) {
 				getActionBar().setTitle(mTitle);
-				invalidateOptionsMenu(); 
-											
+				invalidateOptionsMenu();
+
 			}
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				getActionBar().setTitle(mDrawerTitle);
-				invalidateOptionsMenu(); 
-										
+				invalidateOptionsMenu();
+
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -148,17 +143,16 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public void closeSearchAction(){
+	public void closeSearchAction() {
 		searchItem.collapseActionView();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 
-		searchManager = 
-				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		searchItem = menu.findItem(R.id.action_search);
 		searchView = (SearchView) menu.findItem(R.id.action_search)
 				.getActionView();
@@ -171,26 +165,23 @@ public class MainActivity extends FragmentActivity {
 				Document.MainDoc().server.prompt = query;
 				selectItem(0);
 				Fragment currentFragment = Document.MainDoc().currentFragment;
-				if(currentFragment == null 
-						|| !currentFragment.getTag().equals(
-								FRAGMENT_TAG.SEARCH))
-				{
+				if (currentFragment == null
+						|| !currentFragment.getTag()
+								.equals(FRAGMENT_TAG.SEARCH)) {
 					fragment = new SearchFragment();
 					Document.MainDoc().currentFragment = fragment;
 					FragmentTransaction fragmentTransaction = fragmentManager
 							.beginTransaction();
 					fragmentTransaction.replace(R.id.content_frame, fragment,
 							FRAGMENT_TAG.SEARCH.toString());
+					fragmentTransaction.addToBackStack(null);
 					fragmentTransaction.commit();
 					searchView.clearFocus();
-				}else{
-					SearchFragment searchFragment = 
-							(SearchFragment)currentFragment;
+				} else {
+					SearchFragment searchFragment = (SearchFragment) currentFragment;
 					searchFragment.updateHttp();
 				}
-				
 
-				
 				return false;
 			}
 
@@ -203,7 +194,6 @@ public class MainActivity extends FragmentActivity {
 
 		return true;
 	}
-
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -238,13 +228,14 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public void setChecked(int position, boolean checked){
+	public void setChecked(int position, boolean checked) {
+		Test.info("SelectItem pos=", "" + position);
 		mDrawerList.setItemChecked(position, checked);
 	}
-	
+
 	public void selectItem(int position) {
 
-		Test.info("SelectItem pos=", ""+position);
+
 		if (lastSelectItemPosition == position) {
 			setChecked(position, true);
 			setTitle((String) (mMenuTitles.get(position).get("menuText")));
@@ -268,10 +259,6 @@ public class MainActivity extends FragmentActivity {
 			tag = FRAGMENT_TAG.SHOW;
 			break;
 		case 3:
-			fragment = new SettingFragment();
-			tag = FRAGMENT_TAG.SETTING;
-			break;
-		case 4:
 			fragment = new AboutFragment();
 			tag = FRAGMENT_TAG.ABOUT;
 			break;
@@ -281,19 +268,17 @@ public class MainActivity extends FragmentActivity {
 			break;
 		}
 		Bundle args = new Bundle();
-		
+
 		args.putInt("MENU_ID", position);
 		fragment.setArguments(args);
-		
+
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 		fragmentTransaction.replace(R.id.content_frame, fragment,
 				tag.toString());
 		Document.MainDoc().currentFragment = fragment;
-
+		fragmentTransaction.addToBackStack(null);
 		fragmentTransaction.commit();
-		
-		
 
 		setChecked(position, true);
 		setTitle((String) (mMenuTitles.get(position).get("menuText")));
@@ -307,7 +292,6 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setTitle(mTitle);
 	}
 
-
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -320,12 +304,35 @@ public class MainActivity extends FragmentActivity {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this).setTitle("确认退出吗？")
+				.setIcon(android.R.drawable.ic_menu_info_details)
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// 点击“确认”后的操作
+						MainActivity.this.finish();
+
+					}
+				})
+				.setNegativeButton("返回", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// 点击“返回”后的操作,这里不设置没有任何操作
+					}
+				}).show();
+		// super.onBackPressed();
+	}
 }
 
 /**
  * Drawer的适配器类
+ * 
  * @author Jason
- *
+ * 
  */
 class MyDrawerAdapter extends BaseAdapter {
 
@@ -366,10 +373,9 @@ class MyDrawerAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		HashMap<String, Object> map = 
-				(HashMap<String, Object>) getItem(position);
-		convertView = 
-				inflater.inflate(R.layout.main_activity_drawer_list_item, null);
+		HashMap<String, Object> map = (HashMap<String, Object>) getItem(position);
+		convertView = inflater.inflate(R.layout.main_activity_drawer_list_item,
+				null);
 		ImageView menuImage = (ImageView) convertView
 				.findViewById(R.id.menuImage);
 		TextView menuText = (TextView) convertView.findViewById(R.id.menuText);

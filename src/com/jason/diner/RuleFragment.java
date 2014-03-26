@@ -29,7 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.jason.Interface.IUpdate;
-import com.jason.Task.MyAsyncTask;
+import com.jason.Task.FragmentLoadTask;
 
 /**
  * 规则界面
@@ -124,7 +124,7 @@ public class RuleFragment extends Fragment implements IUpdate {
 			updateUI();
 		}else{
 			Document.MainDoc().server.paramRule = param;
-			MyAsyncTask mTask = new MyAsyncTask(this);
+			FragmentLoadTask mTask = new FragmentLoadTask(this);
 			mTask.execute(Document.MainDoc().server.getConditionUrl(null));
 			progressbar = ProgressDialog.show(
 					Document.MainDoc().mainActivity, "Loading...",
