@@ -23,6 +23,8 @@ enum FRAGMENT_TAG{
 	GUIDE, SEARCH, MAIN, SHOP, RULE, SHOW, SETTING, ABOUT
 }
 
+
+
 /**
  * 服务器信息类
  * @author Jason

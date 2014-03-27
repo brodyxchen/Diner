@@ -85,13 +85,24 @@ public class Helper {
 	 * @return	是否成功
 	 */
 	public static boolean json2Search(String json, SearchInfo search) {
-		if (json == null)
+		if (json == null){
+			Document.MainDoc().error = null;
 			return false;
+		}
 
 		search.clear();
 		ArrayList<ShopInfo> searchList = search.searchList;
 		try {
-			JSONArray arr = new JSONArray(json);
+			JSONObject tempJson = new JSONObject(json);
+			Iterator<String> tempIter = tempJson.keys();
+			String tempKey = tempIter.next();
+			
+			if(tempKey.trim().equals("error")){
+				Document.MainDoc().error = "error";
+				return false;
+			}
+			JSONArray arr = (JSONArray) tempJson.get(tempKey);
+
 			for (int i = 0; i < arr.length(); i++) {
 				JSONObject temp = (JSONObject) arr.get(i);
 
@@ -114,6 +125,7 @@ public class Helper {
 			return true;
 		} catch (Exception e) {
 			search.clear();
+			Document.MainDoc().error = null;
 			return false;
 		}
 
@@ -126,12 +138,23 @@ public class Helper {
 	 * @return	是否成功
 	 */
 	public static boolean json2Shop(String json, ShopInfo shop) {
-		if (json == null)
+		if (json == null){
+			Document.MainDoc().error = null;
 			return false;
+		}
 
 		try {
 			shop.clear();
-			JSONObject jsonShopInfo = new JSONObject(json);
+			
+			JSONObject tempJson = new JSONObject(json);
+			Iterator<String> tempIter = tempJson.keys();
+			String tempKey = tempIter.next();
+			if(tempKey.trim().equals("error")){
+				Document.MainDoc().error = "error";
+				return false;
+			}
+			JSONObject jsonShopInfo = (JSONObject) tempJson.get(tempKey);
+			
 			shop.shopId = jsonShopInfo.getString(ShopInfo.KEYS.SHOP_ID);
 			shop.shopImage = jsonShopInfo.getString(ShopInfo.KEYS.SHOP_IMAGE);
 			shop.shopName = jsonShopInfo.getString(ShopInfo.KEYS.SHOP_NAME);
@@ -169,6 +192,7 @@ public class Helper {
 
 		} catch (Exception e) {
 			shop.clear();
+			Document.MainDoc().error = null;
 			return false;
 		}
 	}
@@ -180,13 +204,24 @@ public class Helper {
 	 * @return	是否成功
 	 */
 	public static boolean json2Order(String json, OrderInfo order) {
-		if (json == null)
+		if (json == null){
+			Document.MainDoc().error = null;
 			return false;
+		}
 
 		order.clear();
 		HashMap<String, ArrayList<ArrayList<DishInfo>>> dishes = order.dishes;
 		try {
-			JSONObject jsonDishes = new JSONObject(json);
+			
+			JSONObject tempJson = new JSONObject(json);
+			Iterator<String> tempIter = tempJson.keys();
+			String tempKey = tempIter.next();
+			if(tempKey.trim().equals("error")){
+				Document.MainDoc().error = "error";
+				return false;
+			}
+			JSONObject jsonDishes = (JSONObject) tempJson.get(tempKey);
+			
 			Iterator<String> iterator = jsonDishes.keys();
 			String key = null;
 			JSONArray value = null;
@@ -229,6 +264,7 @@ public class Helper {
 
 		} catch (Exception e) {
 			order.clear();
+			Document.MainDoc().error = null;
 			return false;
 		}
 
@@ -241,12 +277,23 @@ public class Helper {
 	 * @return	是否成功
 	 */
 	public static boolean json2Condition(String json, ConditionInfo condition) {
-		if (json == null)
+		if (json == null){
+			Document.MainDoc().error = null;
 			return false;
+		}
 
 		condition.clear();
 		try {
-			JSONObject conditonObject = new JSONObject(json);
+			
+			JSONObject tempJson = new JSONObject(json);
+			Iterator<String> tempIter = tempJson.keys();
+			String tempKey = tempIter.next();
+			if(tempKey.trim().equals("error")){
+				Document.MainDoc().error = "error";
+				return false;
+			}
+			JSONObject conditonObject = (JSONObject) tempJson.get(tempKey);
+
 			Iterator<String> iterator = conditonObject.keys();
 			String key = null;
 			JSONArray value = null;
@@ -262,6 +309,7 @@ public class Helper {
 			return true;
 		} catch (Exception e) {
 			condition.clear();
+			Document.MainDoc().error = null;
 			return false;
 		}
 
@@ -273,8 +321,9 @@ public class Helper {
 	 * @return jason
 	 */
 	public static String rule2Json(RuleInfo rule) {
-		if(rule == null)
+		if(rule == null){
 			return null;
+		}
 
 		try {
 			JSONObject jsonObject = new JSONObject();

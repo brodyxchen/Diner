@@ -63,10 +63,15 @@ public class ShopFragment extends Fragment implements IUpdate, INotifyImageCompl
 	public void updateData(String json) {
 		
 		if(!Helper.json2Shop(json, Document.MainDoc().shop)){
-			Toast.makeText(Document.MainDoc().mainActivity,
-					"网络连接异常，请检查网络并重试",
-				     Toast.LENGTH_SHORT).show();
-			Document.MainDoc().server.clearParam();
+			if (Document.MainDoc().error == null) {
+				Toast.makeText(Document.MainDoc().mainActivity,
+						"网络连接异常，请检查网络并重试！", Toast.LENGTH_SHORT).show();
+				Document.MainDoc().server.clearParam();
+			}else if(Document.MainDoc().error.equals("error")){
+				Toast.makeText(Document.MainDoc().mainActivity,
+						"网络参数异常，请检查网络并重试！", Toast.LENGTH_SHORT).show();
+				Document.MainDoc().server.clearParam();
+			}
 		}else{
 			
 			//构造绑定topList的数据

@@ -27,6 +27,7 @@ public class Document {
 	public ImageCache imageCache;		//图片缓存
 	public Fragment currentFragment;	//当前显示的fragment
 	
+	public String error;				//保存错误信息
 	public ServerInfo server;			//服务器信息
 	public SearchInfo search;			//搜索信息
 	public ShopInfo shop;				//餐馆信息

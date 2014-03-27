@@ -150,9 +150,15 @@ public class RuleFragment extends Fragment implements IUpdate {
 	public void updateData(String json) {
 		// TODO Auto-generated method stub
 		if(!Helper.json2Condition(json, Document.MainDoc().condition)){
-			Toast.makeText(Document.MainDoc().mainActivity, "网络连接异常，请检查网络并重试",
-				     Toast.LENGTH_SHORT).show();
-			Document.MainDoc().server.clearParam();
+			if (Document.MainDoc().error == null) {
+				Toast.makeText(Document.MainDoc().mainActivity,
+						"网络连接异常，请检查网络并重试！", Toast.LENGTH_SHORT).show();
+				Document.MainDoc().server.clearParam();
+			}else if(Document.MainDoc().error.equals("error")){
+				Toast.makeText(Document.MainDoc().mainActivity,
+						"网络参数异常，请检查网络并重试！", Toast.LENGTH_SHORT).show();
+				Document.MainDoc().server.clearParam();
+			}
 		}
 		
 		//结束加载条
