@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,8 +33,10 @@ import android.widget.Toast;
 
 import com.jason.Interface.INotifyImageCompleted;
 import com.jason.Interface.IUpdate;
+import com.jason.Network.Httper;
 import com.jason.Task.FragmentLoadTask;
 import com.jason.Task.ImageLoadTask;
+import com.jason.diner.RuleFragment.ViewPair;
 
 /**
  * 菜单界面
@@ -44,6 +47,7 @@ import com.jason.Task.ImageLoadTask;
 public class ShowFragment extends Fragment implements IUpdate {
 
 	private ListView menuList;			//菜单列表
+	private Button submit;
 	private View rootView;
 	private ProgressDialog progressbar;
 
@@ -74,7 +78,8 @@ public class ShowFragment extends Fragment implements IUpdate {
 				String key = entry.getKey();
 				ArrayList<ArrayList<DishInfo>> value = entry.getValue();
 				Document.MainDoc().order.categoryCount.put(key, value.size());
-
+				
+				
 				//分组头
 				ArrayList<DishInfo> dishTags = new ArrayList<DishInfo>();
 				DishInfo dishTag = new DishInfo();
@@ -82,10 +87,11 @@ public class ShowFragment extends Fragment implements IUpdate {
 				dishTag.dishCategory = key;
 				dishTags.add(dishTag);
 				Document.MainDoc().order.dishesBlinding.add(dishTags);
-
+				Document.MainDoc().order.dishIndex.add(0);
 				//分组内容
 				for (int i = 0; i < value.size(); i++) {
 					Document.MainDoc().order.dishesBlinding.add(value.get(i));
+					Document.MainDoc().order.dishIndex.add(0);
 				}
 
 			}
@@ -128,6 +134,48 @@ public class ShowFragment extends Fragment implements IUpdate {
 
 		rootView = inflater.inflate(R.layout.show_fragment, container, false);
 		menuList = (ListView) rootView.findViewById(R.id.showList);
+		
+		submit = (Button)rootView.findViewById(R.id.submit);
+		
+		/**
+		 * 设置提交按钮的监听事件
+		 */
+		submit.setOnClickListener(new View.OnClickListener() {
+			
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ArrayList<DishInfo> selectOrder = new ArrayList<DishInfo>();
+				for(int i = 0; i < Document.MainDoc().order.dishesBlinding.size(); i++)
+				{
+					if(Document.MainDoc().order.dishesBlinding.get(i).size() > 1){
+						int k = Document.MainDoc().order.dishIndex.get(i);
+						DishInfo aDish = Document.MainDoc().order.dishesBlinding.get(i).get(k);
+						selectOrder.add(aDish);
+					}
+				}
+				
+				
+				String param = Helper.selectOrder2Json(selectOrder);
+				param = "order=" + URLEncoder.encode(param);
+				String success = Httper.get(Document.MainDoc().server.getSelectOrderUrl(param));
+				if(success == null)
+				{
+					Toast.makeText(Document.MainDoc().mainActivity,
+							"提交订单失败", Toast.LENGTH_SHORT).show();
+				}else
+				{
+					Toast.makeText(Document.MainDoc().mainActivity,
+							"提交订单成功", Toast.LENGTH_SHORT).show();
+				}
+				
+
+				
+			}
+		});
+		
+		
 		if (Document.MainDoc().rule.shopId == null) {
 			return rootView;
 		}
@@ -194,7 +242,7 @@ class MyShowAdapter extends BaseAdapter implements INotifyImageCompleted{
 
 		//处理分组
 		TextView dishTag;
-		ViewPager dishPager;
+		//ViewPager dishPager;
 		if (isTag) {
 			//当前是分组
 			convertView = inflater.inflate(R.layout.show_fragment_item_tag,
@@ -204,8 +252,8 @@ class MyShowAdapter extends BaseAdapter implements INotifyImageCompleted{
 		} else {
 			//当前是内容
 			convertView = inflater.inflate(R.layout.show_fragment_item, null);
-			dishPager = (ViewPager) convertView.findViewById(R.id.dishPager);
-
+			final ViewPager dishPager = (ViewPager) convertView.findViewById(R.id.dishPager);
+			dishPager.setTag(position);
 			ArrayList<View> viewList = new ArrayList<View>();
 			//处理每一项（ViewPager）
 			for (int i = 0; i < item.size(); i++) {
@@ -266,7 +314,33 @@ class MyShowAdapter extends BaseAdapter implements INotifyImageCompleted{
 			}
 			//绑定ViewPager
 			dishPager.setAdapter(new MyItemPagerAdapter(viewList));
-			dishPager.setCurrentItem(0);
+			
+			dishPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {  
+	              
+	            @Override  
+	            public void onPageSelected(int arg0) { 
+	    			int currIndex = (Integer)dishPager.getTag();
+	    			Document.MainDoc().order.dishIndex.set(currIndex, arg0);
+	            	
+	            	
+	            }
+
+				@Override
+				public void onPageScrollStateChanged(int arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onPageScrolled(int arg0, float arg1, int arg2) {
+					// TODO Auto-generated method stub
+					
+				}
+	        });
+			
+			
+			int pos = Document.MainDoc().order.dishIndex.get(position);
+			dishPager.setCurrentItem(pos);
 		}
 		return convertView;
 	}

@@ -49,6 +49,7 @@ class ServerInfo{
 	private String shopAddress;
 	private String conditionAddress;
 	private String orderAddress;
+	private String selectOrderAddress;
 	
 	ServerInfo(){
 		url = "http://mqstreetball.51a.net222-2.net";
@@ -56,6 +57,7 @@ class ServerInfo{
 		shopAddress = "/selectedShop.php";
 		conditionAddress = "/getRule.php";
 		orderAddress = "/getList.php";
+		selectOrderAddress = "/putOrder.php";
 		
 		paramSearch = null;
 		paramShop = null;
@@ -125,6 +127,18 @@ class ServerInfo{
 		return getUrl;
 	}
 	
+	/**
+	 * 返回最终订单URL
+	 * @param url附加参数 String
+	 * @return 完整的URL
+	 */
+	public String getSelectOrderUrl(String param){
+		String getUrl = url + selectOrderAddress;
+		if(param != null){
+			getUrl += "?" + param;
+		}
+		return getUrl;
+	}
 }
 
 /**
@@ -353,6 +367,9 @@ class OrderInfo{
 	/** 请求的菜单 */
 	public HashMap<String, ArrayList<ArrayList<DishInfo>>> dishes;
 	
+	/** 记录当前显示的菜单index */  //显示的是主菜还是备选菜
+	public ArrayList<Integer> dishIndex;
+	
 	/** 每个分组数量 */
 	public HashMap<String, Integer> categoryCount;
 	
@@ -362,6 +379,7 @@ class OrderInfo{
 	OrderInfo(){
 		ruleInfo = new ConditionInfo();
 		dishes = new HashMap<String, ArrayList<ArrayList<DishInfo>>>();
+		dishIndex = new ArrayList<Integer>();
 		categoryCount = new HashMap<String, Integer>();
 		dishesBlinding = new ArrayList<ArrayList<DishInfo>>();
 	}
@@ -369,6 +387,7 @@ class OrderInfo{
 	public void clear(){
 		ruleInfo.clear();
 		dishes.clear();
+		dishIndex.clear();
 		categoryCount.clear();
 		dishesBlinding.clear();
 	}

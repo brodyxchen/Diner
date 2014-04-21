@@ -364,4 +364,43 @@ public class Helper {
 
 	}
 
+	
+	/**
+	 * ArrayList<DishInfo>×ªJson
+	 * @param list ArrayList<DishInfo>¶ÔÏó
+	 * @return jason
+	 */
+	public static String selectOrder2Json(ArrayList<DishInfo> list) {
+		if(list == null){
+			return null;
+		}
+
+		try {
+			
+			JSONArray jsonArray = new JSONArray();
+			for(int i = 0; i < list.size(); i++){
+				DishInfo aDish = list.get(i);
+				
+				JSONObject jsonObject = new JSONObject();
+				
+				jsonObject.put(DishInfo.KEYS.DISH_CATEGORY, aDish.dishCategory);
+				jsonObject.put(DishInfo.KEYS.DISH_COOKING, aDish.dishCooking);
+				jsonObject.put(DishInfo.KEYS.DISH_FOOD, aDish.dishFood);
+				jsonObject.put(DishInfo.KEYS.DISH_ID, aDish.dishId);
+				jsonObject.put(DishInfo.KEYS.DISH_IMAGE, aDish.dishImage);
+				jsonObject.put(DishInfo.KEYS.DISH_NAME, aDish.dishName);
+				jsonObject.put(DishInfo.KEYS.DISH_TASTE, aDish.dishTaste);
+				
+				jsonArray.put(jsonObject);
+			}
+			
+			return jsonArray.toString();
+
+
+		} catch (Exception e) {
+			return null;
+		}
+
+	}
+
 }

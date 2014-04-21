@@ -118,18 +118,18 @@ public final class R {
         public static final int aboutHeadContext1=0x7f0a0006;
         public static final int aboutHeadContext3=0x7f0a000b;
         public static final int aboutHeadContext4=0x7f0a0010;
-        public static final int action_search=0x7f0a0044;
+        public static final int action_search=0x7f0a0045;
         public static final int content_frame=0x7f0a0013;
         public static final int createShow=0x7f0a002e;
         public static final int dishCategory=0x7f0a003e;
         public static final int dishCooking=0x7f0a003d;
         public static final int dishFood=0x7f0a0039;
         public static final int dishImage=0x7f0a0036;
-        public static final int dishMark=0x7f0a0043;
+        public static final int dishMark=0x7f0a0044;
         public static final int dishName=0x7f0a0038;
-        public static final int dishPager=0x7f0a0041;
+        public static final int dishPager=0x7f0a0042;
         public static final int dishSelect=0x7f0a003f;
-        public static final int dishTag=0x7f0a0042;
+        public static final int dishTag=0x7f0a0043;
         public static final int dishTaste=0x7f0a003c;
         public static final int divideLine0=0x7f0a002d;
         public static final int drawer_layout=0x7f0a0012;
@@ -160,6 +160,7 @@ public final class R {
         public static final int shopIntroduce=0x7f0a0034;
         public static final int shopName=0x7f0a0032;
         public static final int showList=0x7f0a0040;
+        public static final int submit=0x7f0a0041;
         public static final int text0=0x7f0a002a;
         public static final int text1=0x7f0a0029;
         public static final int topItemDiver0=0x7f0a003a;
@@ -194,17 +195,17 @@ public final class R {
         public static final int main=0x7f090000;
     }
     public static final class string {
-        public static final int about_address=0x7f070014;
-        public static final int about_address_context=0x7f070018;
-        public static final int about_email=0x7f070013;
-        public static final int about_email_context=0x7f070017;
+        public static final int about_address=0x7f070015;
+        public static final int about_address_context=0x7f070019;
+        public static final int about_email=0x7f070014;
+        public static final int about_email_context=0x7f070018;
         /**  About 
          */
-        public static final int about_head=0x7f070010;
-        public static final int about_team=0x7f070011;
-        public static final int about_team_context=0x7f070015;
-        public static final int about_tel=0x7f070012;
-        public static final int about_tel_context=0x7f070016;
+        public static final int about_head=0x7f070011;
+        public static final int about_team=0x7f070012;
+        public static final int about_team_context=0x7f070016;
+        public static final int about_tel=0x7f070013;
+        public static final int about_tel_context=0x7f070017;
         public static final int action_search=0x7f070004;
         public static final int app_name=0x7f070000;
         public static final int app_not_available=0x7f070005;
@@ -212,6 +213,7 @@ public final class R {
         public static final int drawer_close=0x7f070003;
         public static final int drawer_open=0x7f070002;
         public static final int enter_app=0x7f070001;
+        public static final int rule_submit_button=0x7f070010;
         public static final int rules_edit_button=0x7f07000e;
         public static final int rules_number_class1=0x7f07000b;
         public static final int rules_number_class2=0x7f07000c;
