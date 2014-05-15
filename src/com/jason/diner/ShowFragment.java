@@ -146,7 +146,8 @@ public class ShowFragment extends Fragment implements IUpdate {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				ArrayList<DishInfo> selectOrder = new ArrayList<DishInfo>();
+				ArrayList<DishInfo> selectOrder = Document.MainDoc().order.orders;
+				selectOrder.clear();
 				for(int i = 0; i < Document.MainDoc().order.dishesBlinding.size(); i++)
 				{
 					if(Document.MainDoc().order.dishesBlinding.get(i).size() > 1){

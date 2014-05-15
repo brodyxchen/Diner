@@ -15,6 +15,8 @@
     <color name="font_gray_normal">#808080</color> <!-- 灰色 -->
     <color name="font_gray_deep">#000000</color> <!-- 深灰色 -->
     
+    <color name="font_state_normal">#3366cc</color> <!-- 淡神橘红 -->
+    
     <color name="font_color_light">#FFD7B2</color> <!-- 淡彩色 -->
     <color name="font_color_normal">#FFA147</color> <!-- 彩色 -->
     <color name="font_color_deep">#FF7E00</color> <!-- 深彩色 -->

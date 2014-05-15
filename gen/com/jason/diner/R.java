@@ -29,35 +29,35 @@ public final class R {
         /**  白色 区块背景 
          */
         public static final int background_gray_normal=0x7f050001;
-        public static final int blue=0x7f050013;
+        public static final int blue=0x7f050014;
         /**  彩色 
          */
-        public static final int divider_color_deep=0x7f050011;
+        public static final int divider_color_deep=0x7f050012;
         /**  深灰色 
          */
-        public static final int divider_color_light=0x7f05000f;
+        public static final int divider_color_light=0x7f050010;
         /**  淡彩色 
          */
-        public static final int divider_color_normal=0x7f050010;
+        public static final int divider_color_normal=0x7f050011;
         /**  灰色 
          */
-        public static final int divider_gray_deep=0x7f05000e;
+        public static final int divider_gray_deep=0x7f05000f;
         /**  深彩色 
  分割线 
          */
-        public static final int divider_gray_light=0x7f05000c;
+        public static final int divider_gray_light=0x7f05000d;
         /**  淡灰色 
          */
-        public static final int divider_gray_normal=0x7f05000d;
+        public static final int divider_gray_normal=0x7f05000e;
         /**  彩色 
          */
-        public static final int font_color_deep=0x7f05000b;
-        /**  深灰色 
+        public static final int font_color_deep=0x7f05000c;
+        /**  淡神橘红 
          */
-        public static final int font_color_light=0x7f050009;
+        public static final int font_color_light=0x7f05000a;
         /**  淡彩色 
          */
-        public static final int font_color_normal=0x7f05000a;
+        public static final int font_color_normal=0x7f05000b;
         /**  灰色 
          */
         public static final int font_gray_deep=0x7f050008;
@@ -68,11 +68,14 @@ public final class R {
         /**  淡灰色 
          */
         public static final int font_gray_normal=0x7f050007;
-        public static final int green=0x7f050014;
-        public static final int light=0x7f050015;
+        /**  深灰色 
+         */
+        public static final int font_state_normal=0x7f050009;
+        public static final int green=0x7f050015;
+        public static final int light=0x7f050016;
         /**  深彩色 
          */
-        public static final int red=0x7f050012;
+        public static final int red=0x7f050013;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -118,20 +121,22 @@ public final class R {
         public static final int aboutHeadContext1=0x7f0a0006;
         public static final int aboutHeadContext3=0x7f0a000b;
         public static final int aboutHeadContext4=0x7f0a0010;
-        public static final int action_search=0x7f0a0045;
+        public static final int action_search=0x7f0a0048;
+        public static final int comment=0x7f0a0023;
         public static final int content_frame=0x7f0a0013;
-        public static final int createShow=0x7f0a002e;
-        public static final int dishCategory=0x7f0a003e;
-        public static final int dishCooking=0x7f0a003d;
-        public static final int dishFood=0x7f0a0039;
-        public static final int dishImage=0x7f0a0036;
-        public static final int dishMark=0x7f0a0044;
-        public static final int dishName=0x7f0a0038;
-        public static final int dishPager=0x7f0a0042;
-        public static final int dishSelect=0x7f0a003f;
-        public static final int dishTag=0x7f0a0043;
-        public static final int dishTaste=0x7f0a003c;
-        public static final int divideLine0=0x7f0a002d;
+        public static final int createShow=0x7f0a003a;
+        public static final int dishCategory=0x7f0a002d;
+        public static final int dishCooking=0x7f0a002c;
+        public static final int dishFood=0x7f0a0028;
+        public static final int dishImage=0x7f0a0024;
+        public static final int dishMark=0x7f0a0047;
+        public static final int dishName=0x7f0a0026;
+        public static final int dishPager=0x7f0a0045;
+        public static final int dishSelect=0x7f0a0042;
+        public static final int dishState=0x7f0a0027;
+        public static final int dishTag=0x7f0a0046;
+        public static final int dishTaste=0x7f0a002b;
+        public static final int divideLine0=0x7f0a0039;
         public static final int drawer_layout=0x7f0a0012;
         public static final int guideImage=0x7f0a0011;
         public static final int iv_bottom_line=0x7f0a001a;
@@ -139,33 +144,34 @@ public final class R {
         public static final int linearLayout1=0x7f0a0017;
         public static final int menuImage=0x7f0a0015;
         public static final int menuText=0x7f0a0016;
+        public static final int orderList=0x7f0a0022;
         public static final int page0=0x7f0a001e;
         public static final int page1=0x7f0a001f;
         public static final int page2=0x7f0a0020;
         public static final int pagertitle=0x7f0a001d;
-        public static final int relativeLayout1=0x7f0a0037;
-        public static final int ruleArea0=0x7f0a0025;
-        public static final int ruleHead0=0x7f0a0026;
-        public static final int ruleMain=0x7f0a0024;
-        public static final int ruleNumberPicker1=0x7f0a002b;
-        public static final int ruleNumberPicker2=0x7f0a0028;
-        public static final int ruleNumberPicker3=0x7f0a002c;
-        public static final int ruleRoot=0x7f0a0022;
-        public static final int ruleZone0=0x7f0a0027;
-        public static final int scrollRule=0x7f0a0023;
-        public static final int searchList=0x7f0a0030;
-        public static final int search_shop=0x7f0a002f;
-        public static final int shopAddress=0x7f0a0033;
-        public static final int shopImage=0x7f0a0031;
-        public static final int shopIntroduce=0x7f0a0034;
-        public static final int shopName=0x7f0a0032;
-        public static final int showList=0x7f0a0040;
-        public static final int submit=0x7f0a0041;
-        public static final int text0=0x7f0a002a;
-        public static final int text1=0x7f0a0029;
-        public static final int topItemDiver0=0x7f0a003a;
-        public static final int topItemDiver1=0x7f0a003b;
-        public static final int topList=0x7f0a0035;
+        public static final int relativeLayout1=0x7f0a0025;
+        public static final int ruleArea0=0x7f0a0031;
+        public static final int ruleHead0=0x7f0a0032;
+        public static final int ruleMain=0x7f0a0030;
+        public static final int ruleNumberPicker1=0x7f0a0037;
+        public static final int ruleNumberPicker2=0x7f0a0034;
+        public static final int ruleNumberPicker3=0x7f0a0038;
+        public static final int ruleRoot=0x7f0a002e;
+        public static final int ruleZone0=0x7f0a0033;
+        public static final int scrollRule=0x7f0a002f;
+        public static final int searchList=0x7f0a003c;
+        public static final int search_shop=0x7f0a003b;
+        public static final int shopAddress=0x7f0a003f;
+        public static final int shopImage=0x7f0a003d;
+        public static final int shopIntroduce=0x7f0a0040;
+        public static final int shopName=0x7f0a003e;
+        public static final int showList=0x7f0a0043;
+        public static final int submit=0x7f0a0044;
+        public static final int text0=0x7f0a0036;
+        public static final int text1=0x7f0a0035;
+        public static final int topItemDiver0=0x7f0a0029;
+        public static final int topItemDiver1=0x7f0a002a;
+        public static final int topList=0x7f0a0041;
         public static final int tv_tab_rule=0x7f0a0019;
         public static final int tv_tab_shop=0x7f0a0018;
         public static final int vPager=0x7f0a001b;
@@ -180,39 +186,45 @@ public final class R {
         public static final int main_fragment=0x7f030004;
         public static final int nav_activity=0x7f030005;
         public static final int nav_activity_image=0x7f030006;
-        public static final int rule_fragment=0x7f030007;
-        public static final int search_fragment=0x7f030008;
-        public static final int search_fragment_item=0x7f030009;
-        public static final int shop_fragment=0x7f03000a;
-        public static final int shop_fragment_item=0x7f03000b;
-        public static final int show_fragment=0x7f03000c;
-        public static final int show_fragment_item=0x7f03000d;
-        public static final int show_fragment_item_tag=0x7f03000e;
-        public static final int show_fragment_item_viewpager=0x7f03000f;
-        public static final int splash_activity=0x7f030010;
+        public static final int order_fragment=0x7f030007;
+        public static final int order_fragment_item=0x7f030008;
+        public static final int rule_fragment=0x7f030009;
+        public static final int search_fragment=0x7f03000a;
+        public static final int search_fragment_item=0x7f03000b;
+        public static final int shop_fragment=0x7f03000c;
+        public static final int shop_fragment_item=0x7f03000d;
+        public static final int show_fragment=0x7f03000e;
+        public static final int show_fragment_item=0x7f03000f;
+        public static final int show_fragment_item_tag=0x7f030010;
+        public static final int show_fragment_item_viewpager=0x7f030011;
+        public static final int splash_activity=0x7f030012;
     }
     public static final class menu {
         public static final int main=0x7f090000;
     }
     public static final class string {
-        public static final int about_address=0x7f070015;
-        public static final int about_address_context=0x7f070019;
-        public static final int about_email=0x7f070014;
-        public static final int about_email_context=0x7f070018;
+        public static final int about_address=0x7f070019;
+        public static final int about_address_context=0x7f07001d;
+        public static final int about_email=0x7f070018;
+        public static final int about_email_context=0x7f07001c;
         /**  About 
          */
-        public static final int about_head=0x7f070011;
-        public static final int about_team=0x7f070012;
-        public static final int about_team_context=0x7f070016;
-        public static final int about_tel=0x7f070013;
-        public static final int about_tel_context=0x7f070017;
+        public static final int about_head=0x7f070015;
+        public static final int about_team=0x7f070016;
+        public static final int about_team_context=0x7f07001a;
+        public static final int about_tel=0x7f070017;
+        public static final int about_tel_context=0x7f07001b;
         public static final int action_search=0x7f070004;
         public static final int app_name=0x7f070000;
         public static final int app_not_available=0x7f070005;
+        public static final int comment_cancel=0x7f070013;
+        public static final int comment_head=0x7f070012;
+        public static final int comment_sure=0x7f070014;
         public static final int desc=0x7f070009;
         public static final int drawer_close=0x7f070003;
         public static final int drawer_open=0x7f070002;
         public static final int enter_app=0x7f070001;
+        public static final int rule_comment_button=0x7f070011;
         public static final int rule_submit_button=0x7f070010;
         public static final int rules_edit_button=0x7f07000e;
         public static final int rules_number_class1=0x7f07000b;

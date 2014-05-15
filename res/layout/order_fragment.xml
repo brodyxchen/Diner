@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+    
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_gray_normal"
+    android:orientation="vertical" >
+
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="50dp"
+	    android:background="@color/background_gray_normal"
+	    android:orientation="vertical" >
+    
+		<ListView android:id="@+id/orderList"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:cacheColorHint="#999999"
+			android:background="@color/background_gray_light"
+		    android:layout_marginTop="0dip">
+			</ListView> 
+		<View
+		   android:layout_width="fill_parent"
+		   android:layout_height="1dip"
+		   android:background="?android:attr/listDivider" />
+    </RelativeLayout>
+    
+    <Button
+        android:id="@+id/comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/background_color_deep"
+        android:text="@string/rule_comment_button"
+        android:textSize="22sp" >
+    </Button>
+
+</RelativeLayout>

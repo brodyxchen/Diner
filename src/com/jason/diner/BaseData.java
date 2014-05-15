@@ -20,7 +20,7 @@ public class BaseData {}
  *
  */
 enum FRAGMENT_TAG{
-	GUIDE, SEARCH, MAIN, SHOP, RULE, SHOW, SETTING, ABOUT
+	GUIDE, SEARCH, MAIN, SHOP, RULE, SHOW, ORDER, SETTING, ABOUT
 }
 
 
@@ -361,6 +361,9 @@ class RuleInfo{
  *
  */
 class OrderInfo{
+	
+	public String states[] = {"待开始","配菜中","已下锅"};
+	
 	//菜单信息
 	public ConditionInfo ruleInfo;
 	
@@ -376,12 +379,20 @@ class OrderInfo{
 	/** 菜单绑定 */
 	public ArrayList<ArrayList<DishInfo>> dishesBlinding;
 	
+	/** 最终订单 */
+	public ArrayList<DishInfo> orders;
+	
+	/** 最终订单绑定 */
+	public ArrayList<HashMap<String, Object>> ordersBinding;
+	
 	OrderInfo(){
 		ruleInfo = new ConditionInfo();
 		dishes = new HashMap<String, ArrayList<ArrayList<DishInfo>>>();
 		dishIndex = new ArrayList<Integer>();
 		categoryCount = new HashMap<String, Integer>();
 		dishesBlinding = new ArrayList<ArrayList<DishInfo>>();
+		orders = new ArrayList<DishInfo>();
+		ordersBinding = new ArrayList<HashMap<String, Object>>();
 	}
 	
 	public void clear(){
@@ -390,5 +401,7 @@ class OrderInfo{
 		dishIndex.clear();
 		categoryCount.clear();
 		dishesBlinding.clear();
+		orders.clear();
+		ordersBinding.clear();
 	}
 }

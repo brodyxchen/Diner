@@ -98,6 +98,11 @@ public class MainActivity extends FragmentActivity {
 		map2.put("menuText", "菜单");
 		mMenuTitles.add(map2);
 
+		HashMap<String, Object> map23 = new HashMap<String, Object>();
+		map23.put("menuImage", android.R.drawable.ic_menu_add);
+		map23.put("menuText", "订单");
+		mMenuTitles.add(map23);
+		
 		HashMap<String, Object> map3 = new HashMap<String, Object>();
 		map3.put("menuImage", android.R.drawable.ic_menu_info_details);
 		map3.put("menuText", "关于");
@@ -282,6 +287,10 @@ public class MainActivity extends FragmentActivity {
 			tag = FRAGMENT_TAG.SHOW;
 			break;
 		case 3:
+			fragment = new OrderFragment();
+			tag = FRAGMENT_TAG.ORDER;
+			break;
+		case 4:
 			fragment = new AboutFragment();
 			tag = FRAGMENT_TAG.ABOUT;
 			break;
